@@ -21,7 +21,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
 
 			// filters to get plugin settings
-			add_filter( 'wp-rest-api-toolbox-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 3 );
+			add_filter( 'wp-rest-api-toolbox-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 2 );
 			add_filter( 'wp-rest-api-toolbox-setting-get', array( $this, 'setting_get' ), 10, 3 );
 
 		}
@@ -145,20 +145,38 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		public function setting_is_enabled( $enabled, $key, $setting ) {
-			return '1' === $this->setting_get( '0', $key, $setting );
+		public function change_enabled_setting( $key, $setting, $enabled ) {
+			$options_key = $this->options_key( $key, $setting );
+			$option = get_option( $options_key );
+			if ( false === $option ) {
+				$option = array();
+			}
+
+			$option[ $setting ] = $enabled ? '1' : '0';
+
+			update_option( $options_key, $option );
 		}
 
 
-		public function setting_get( $value, $key, $setting ) {
+		public function setting_is_enabled( $key, $setting ) {
+			return '1' === $this->setting_get( $key, $setting, '0' );
+		}
 
-			$args = wp_parse_args( get_option( $key ),
+
+		public function setting_get( $key, $setting, $value ) {
+
+			$args = wp_parse_args( get_option( $this->options_key( $key, $setting ) ),
 				array(
 					$setting => $value,
 				)
 			);
 
-			return $args[$setting];
+			return $args[ $setting ];
+		}
+
+
+		private function options_key( $key, $setting ) {
+			return "{$this->settings_page}-{$key}";
 		}
 
 

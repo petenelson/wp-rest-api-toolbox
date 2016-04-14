@@ -26,6 +26,13 @@ module.exports = function( grunt ) {
 			},
 		},
 
+		phpunit: {
+			'default': {
+				cmd: 'phpunit',
+				args: ['-c', 'phpunit.xml.dist']
+			},
+		},
+
 		makepot: {
 			target: {
 				options: {
@@ -43,10 +50,22 @@ module.exports = function( grunt ) {
 		},
 	} );
 
+	require('phplint').gruntPlugin(grunt);
+
 	grunt.loadNpmTasks( 'grunt-wp-i18n' );
 	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
 	grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
+
+	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
+
+	grunt.registerMultiTask('phpunit', 'Runs PHPUnit tests', function() {
+		grunt.util.spawn({
+			cmd: this.data.cmd,
+			args: this.data.args,
+			opts: {stdio: 'inherit'}
+		}, this.async());
+	});
 
 	grunt.util.linefeed = '\n';
 

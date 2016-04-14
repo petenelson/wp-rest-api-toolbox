@@ -14,10 +14,13 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Common' ) ) {
 
 		public function rest_api_disabled_filter( $enabled ) {
 			if ( $enabled ) {
-				$disabled = apply_filters( 'wp-rest-api-toolbox-setting-is-enabled', false, 'wp-rest-api-toolbox-settings-general', 'disable-rest-api' );
-				if ( $disabled ) {
-					$enabled  = false;
+				$settings = new WP_REST_API_Toolbox_Settings();
+				$disable_rest_api = $settings->setting_is_enabled( 'general', 'disable-rest-api' );
+
+				if ( $disable_rest_api ) {
+					$enabled = false;
 				}
+
 			}
 			return $enabled;
 		}

@@ -1,12 +1,15 @@
 <?php
 /**
- * Plugin Name: Wp-rest-api-toolbox
- * Version: 0.1-alpha
- * Description: PLUGIN DESCRIPTION HERE
- * Author: YOUR NAME HERE
- * Author URI: YOUR SITE HERE
- * Plugin URI: PLUGIN SITE HERE
+ * Plugin Name: REST API Toolbox
+ * Version: 1.0.0
+ * Description: Allows easy tweaks of several REST API settings
+ * Author: Pete Nelson
+ * Author URI: https://github.com/petenelson/wp-rest-api-toolbox
+ * Plugin URI: https://wordpress.org/plugins/wp-rest-api-toolbox
  * Text Domain: wp-rest-api-toolbox
  * Domain Path: /languages
- * @package Wp-rest-api-toolbox
+ * @package wp-rest-api-toolbox
  */
+
+
+// TODO make the magic happen here

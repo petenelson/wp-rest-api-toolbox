@@ -8,9 +8,13 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		public function plugins_loaded() {
 			
-			add_filter( 'rest_enabled', array( $this, 'rest_api_disabled_filter' ) );
+			add_filter( 'rest_enabled',         array( $this, 'rest_api_disabled_filter' ) );
 
-			add_filter( 'rest_pre_dispatch', array( $this, 'disallow_non_ssl' ), 10, 3 );
+			add_filter( 'rest_pre_dispatch',    array( $this, 'disallow_non_ssl' ), 10, 3 );
+
+
+			add_filter( 'rest_index',           array( $this, 'remove_wordpress_core_namespace' ), 10, 3 );
+			add_filter( 'rest_endpoints',       array( $this, 'remove_wordpress_core_endpoints'), 10, 1 );
 
 		}
 
@@ -42,6 +46,41 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			return $response;
 		}
 
+
+		public function remove_wordpress_core_namespace( $response ) {
+
+			$settings = new REST_API_Toolbox_Settings();
+			$remove_all_core_endpoints = $settings->setting_is_enabled( 'core', 'remove-all-core-endpoints' );
+			if ( $remove_all_core_endpoints ) {
+				if ( ! empty( $response->data ) && ! empty( $response->data['namespaces'] ) ) {
+					for( $i = count( $response->data['namespaces'] ) - 1; $i >= 0; $i-- ) {
+						if ( 'wp/v2' === $response->data['namespaces'][ $i ] ) {
+							unset( $response->data['namespaces'][ $i ] );
+							$response->data['namespaces'] = array_values( $response->data['namespaces'] );
+							break;
+						}
+					}
+				}
+			}
+			return $response;
+		}
+
+
+		public function remove_wordpress_core_endpoints( $endpoints ) {
+
+			$settings = new REST_API_Toolbox_Settings();
+			$remove_all_core_endpoints = $settings->setting_is_enabled( 'core', 'remove-all-core-endpoints' );
+
+			if ( $remove_all_core_endpoints ) {
+				foreach ( array_keys( $endpoints ) as $endpoint ) {
+					if ( stripos( $endpoint, '/wp/v2' ) === 0 ) {
+						unset( $endpoints[ $endpoint ] );
+					}
+				}
+			}
+
+			return $endpoints;
+		}
 
 	}
 

@@ -20,4 +20,3 @@ class REST_API_Toolbox_Test_SSL extends WP_UnitTestCase {
 
 	}
 }
-

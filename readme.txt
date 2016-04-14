@@ -17,7 +17,6 @@ Allows tweaking of several REST API settings
 * Disaple the REST API
 * Remove WordPress core endpoints
 * Force SSL
-* TODO Change base URL of the API
 
 == Installation ==
 

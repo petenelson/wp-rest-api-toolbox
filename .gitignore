@@ -1,5 +1,6 @@
 /.editorconfig
 /.DS_Store
 /node_modules
+/composer.lock
 /vendor
 

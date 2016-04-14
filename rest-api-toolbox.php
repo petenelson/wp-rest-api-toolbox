@@ -5,18 +5,18 @@
  * Description: Allows easy tweaks of several REST API settings
  * Author: Pete Nelson
  * Author URI: https://github.com/petenelson/wp-rest-api-toolbox
- * Plugin URI: https://wordpress.org/plugins/wp-rest-api-toolbox
- * Text Domain: wp-rest-api-toolbox
+ * Plugin URI: https://wordpress.org/plugins/rest-api-toolbox
+ * Text Domain: rest-api-toolbox
  * Domain Path: /languages
  * @package wp-rest-api-toolbox
  */
 
-class WP_REST_API_Toolbox_Plugin {
+class REST_API_Toolbox_Plugin {
 
 
 	function define_constants() {
-		if ( ! defined( 'WP_REST_API_TOOLBOX_ROOT' ) ) {
-			define( 'WP_REST_API_TOOLBOX_ROOT', trailingslashit( dirname( __FILE__ ) ) );
+		if ( ! defined( 'REST_API_TOOLBOX_ROOT' ) ) {
+			define( 'REST_API_TOOLBOX_ROOT', trailingslashit( dirname( __FILE__ ) ) );
 		}
 	}
 
@@ -24,16 +24,16 @@ class WP_REST_API_Toolbox_Plugin {
 		$include_files = array( 'common', 'i18n', 'settings' );
 		$files = array();
 		foreach ( $include_files as $include_file ) {
-			$files[] = WP_REST_API_TOOLBOX_ROOT . 'includes/class-wp-rest-api-toolbox-' . $include_file . '.php';
+			$files[] = REST_API_TOOLBOX_ROOT . 'includes/class-rest-api-toolbox-' . $include_file . '.php';
 		}
 		return $files;
 	}
 
 	function get_class_names() {
 		return array(
-			'WP_REST_API_Toolbox_Common',
-			'WP_REST_API_Toolbox_i18n',
-			'WP_REST_API_Toolbox_Settings',
+			'REST_API_Toolbox_Common',
+			'REST_API_Toolbox_i18n',
+			'REST_API_Toolbox_Settings',
 			);
 	}
 
@@ -45,7 +45,7 @@ class WP_REST_API_Toolbox_Plugin {
 
 }
 
-$plugin = new WP_REST_API_Toolbox_Plugin();
+$plugin = new REST_API_Toolbox_Plugin();
 $plugin->define_constants();
 $plugin->require_files( $plugin->get_required_files() );
 
@@ -58,5 +58,8 @@ foreach( $plugin->get_class_names() as $class_name ) {
 
 	foreach ( $classes as $class ) {
 		add_action( 'plugins_loaded', array( $class, 'plugins_loaded' ) );
+		if ( method_exists( $class, 'activation_hook' ) ) {
+			register_activation_hook( __FILE__, array( $class, 'activation_hook' ) );
+		}
 	}
 }

@@ -2,15 +2,15 @@
 
 if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
-if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
+if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
-	class WP_REST_API_Toolbox_Settings {
+	class REST_API_Toolbox_Settings {
 
-		private $settings_page         = 'wp-rest-api-toolbox-settings';
-		private $settings_key_general  = 'wp-rest-api-toolbox-settings-general';
-		private $settings_key_core     = 'wp-rest-api-toolbox-settings-core';
-		private $settings_key_ssl      = 'wp-rest-api-toolbox-settings-ssl';
-		private $settings_key_help     = 'wp-rest-api-toolbox-settings-help';
+		private $settings_page         = 'rest-api-toolbox-settings';
+		private $settings_key_general  = 'rest-api-toolbox-settings-general';
+		private $settings_key_core     = 'rest-api-toolbox-settings-core';
+		private $settings_key_ssl      = 'rest-api-toolbox-settings-ssl';
+		private $settings_key_help     = 'rest-api-toolbox-settings-help';
 		private $plugin_settings_tabs  = array();
 
 
@@ -21,8 +21,8 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
 
 			// filters to get plugin settings
-			add_filter( 'wp-rest-api-toolbox-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 2 );
-			add_filter( 'wp-rest-api-toolbox-setting-get', array( $this, 'setting_get' ), 10, 3 );
+			add_filter( 'rest-api-toolbox-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 2 );
+			add_filter( 'rest-api-toolbox-setting-get', array( $this, 'setting_get' ), 10, 3 );
 
 		}
 
@@ -35,25 +35,22 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 		public function activation_hook() {
 
-			// create default settings
-			add_option( $this->settings_key_general, $this->get_default_settings(), '', $autoload = 'no' );
-
 			// add an option so we can show the activated admin notice
-			add_option( 'wp-rest-api-toolbox-plugin-activated', '1' );
+			add_option( 'rest-api-toolbox-plugin-activated', '1' );
 
 		}
 
 
 		public function activation_admin_notice() {
-			if ( '1' === get_option( 'wp-rest-api-toolbox-plugin-activated' ) ) {
+			if ( '1' === get_option( 'rest-api-toolbox-plugin-activated' ) ) {
 				?>
 					<div class="updated">
 						<p>
-							<?php echo wp_kses_post( sprintf( __( '<strong>REST API Toolbox activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'wp-rest-api-toolbox' ), esc_url( admin_url( 'options-general.php?page=wp-rest-api-toolbox-settings' ) ) ) ); ?>
+							<?php echo wp_kses_post( sprintf( __( '<strong>REST API Toolbox activated!</strong> Please <a href="%s">visit the Settings page</a> to customize the settings.', 'rest-api-toolbox' ), esc_url( admin_url( 'options-general.php?page=rest-api-toolbox-settings' ) ) ) ); ?>
 						</p>
 					</div>
 				<?php
-				delete_option( 'wp-rest-api-toolbox-plugin-activated' );
+				delete_option( 'rest-api-toolbox-plugin-activated' );
 			}
 		}
 
@@ -81,7 +78,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'wp-rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-rest-api', 'after' => '' ) );
 
 		}
@@ -89,7 +86,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 		private function register_core_settings() {
 			$key = $this->settings_key_core;
-			$this->plugin_settings_tabs[$key] = __( 'Core', 'wp-rest-api-toolbox' );
+			$this->plugin_settings_tabs[$key] = __( 'Core', 'rest-api-toolbox' );
 
 			register_setting( $key, $key, array( $this, 'sanitize_core_settings') );
 
@@ -97,7 +94,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'disable-all-core-endpoints', __( 'Disable WordPress Core Endpoints', 'wp-rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'disable-all-core-endpoints', __( 'Disable WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-all-core-endpoints', 'after' => '' ) );
 
 		}
@@ -105,7 +102,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 		private function register_ssl_settings() {
 			$key = $this->settings_key_ssl;
-			$this->plugin_settings_tabs[$key] = __( 'SSL', 'wp-rest-api-toolbox' );
+			$this->plugin_settings_tabs[$key] = __( 'SSL', 'rest-api-toolbox' );
 
 			register_setting( $key, $key, array( $this, 'sanitize_ssl_settings') );
 
@@ -113,7 +110,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'require-ssl', __( 'Require SSL', 'wp-rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'require-ssl', __( 'Require SSL', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'require-ssl', 'after' => '' ) );
 
 		}
@@ -309,7 +306,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 
 		public function admin_menu() {
-			add_options_page( 'REST API Toolbox' . __( 'Settings' ), __( 'REST API Toolbox', 'wp-rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( 'REST API Toolbox' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 
@@ -332,7 +329,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
 			if ( ! empty( $settings_updated ) ) {
-				do_action( 'wp-rest-api-toolbox-flush-sizes-transient' );
+				do_action( 'rest-api-toolbox-flush-sizes-transient' );
 			}
 
 		}
@@ -359,7 +356,7 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 			switch ( $args['id'] ) {
 				case 'help';
-					include_once WP_REST_API_TOOLBOX_ROOT . 'admin/partials/admin-help.php';
+					include_once REST_API_TOOLBOX_ROOT . 'admin/partials/admin-help.php';
 					break;
 			}
 

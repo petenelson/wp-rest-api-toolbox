@@ -9,7 +9,7 @@ module.exports = function( grunt ) {
 
 		addtextdomain: {
 			options: {
-				textdomain: 'wp-rest-api-toolbox',
+				textdomain: 'rest-api-toolbox',
 			},
 			target: {
 				files: {
@@ -37,8 +37,8 @@ module.exports = function( grunt ) {
 			target: {
 				options: {
 					domainPath: '/languages',
-					mainFile: 'wp-rest-api-toolbox.php',
-					potFilename: 'wp-rest-api-toolbox.pot',
+					mainFile: 'rest-api-toolbox.php',
+					potFilename: 'rest-api-toolbox.pot',
 					potHeaders: {
 						poedit: true,
 						'x-poedit-keywordslist': true

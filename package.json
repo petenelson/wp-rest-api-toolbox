@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "main": "Gruntfile.js",
   "author": "Pete Nelson",
+  "license": "GPLv2 or later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/petenelson/wp-rest-api-toolbox.git"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-wp-i18n": "^0.5.0",
     "grunt-wp-readme-to-markdown": "~0.9.0",
-	"phplint": "^1.7.1"
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-copy": "^0.8.2",
+    "phplint": "^1.7.1"
   }
 }

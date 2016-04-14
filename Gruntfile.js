@@ -26,6 +26,10 @@ module.exports = function( grunt ) {
 			},
 		},
 
+		clean:  {
+			wp: [ "release" ]
+		},
+
 		phpunit: {
 			'default': {
 				cmd: 'phpunit',
@@ -48,16 +52,55 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
+		copy:   {
+			// create release for WordPress repository
+			wp: {
+				files: [
+
+					// directories
+					{ expand: true, src: ['admin/**'], dest: 'release/rest-api-toolbox/' },
+					{ expand: true, src: ['includes/**'], dest: 'release/rest-api-toolbox/' },
+					{ expand: true, src: ['languages/**'], dest: 'release/rest-api-toolbox/' },
+
+					// root dir files
+					{
+						expand: true,
+						src: [
+							'*.php',
+							'readme.txt',
+							],
+						dest: 'release/rest-api-toolbox/'
+					}
+
+				]
+			} // wp
+
+		}
+
 	} );
 
 	require('phplint').gruntPlugin(grunt);
 
-	grunt.loadNpmTasks( 'grunt-wp-i18n' );
-	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
+	var tasks = [
+		'grunt-contrib-clean',
+		'grunt-contrib-copy',
+		'grunt-wp-i18n',
+		'grunt-wp-readme-to-markdown'
+		];
+
+	for	( var i = 0; i < tasks.length; i++ ) {
+		grunt.loadNpmTasks( tasks[ i ] );
+	};
+
+
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
 	grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
 
 	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
+
+	// create release for WordPress repository
+	grunt.registerTask( 'wp', [ 'clean', 'copy' ] );
 
 	grunt.registerMultiTask('phpunit', 'Runs PHPUnit tests', function() {
 		grunt.util.spawn({

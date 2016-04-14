@@ -8,6 +8,8 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 		private $settings_page         = 'wp-rest-api-toolbox-settings';
 		private $settings_key_general  = 'wp-rest-api-toolbox-settings-general';
+		private $settings_key_core     = 'wp-rest-api-toolbox-settings-core';
+		private $settings_key_ssl      = 'wp-rest-api-toolbox-settings-ssl';
 		private $settings_key_help     = 'wp-rest-api-toolbox-settings-help';
 		private $plugin_settings_tabs  = array();
 
@@ -63,6 +65,8 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 
 		public function admin_init() {
 			$this->register_general_settings();
+			$this->register_core_settings();
+			$this->register_ssl_settings();
 			$this->register_help_tab();
 		}
 
@@ -83,7 +87,50 @@ if ( ! class_exists( 'WP_REST_API_Toolbox_Settings' ) ) {
 		}
 
 
+		private function register_core_settings() {
+			$key = $this->settings_key_core;
+			$this->plugin_settings_tabs[$key] = __( 'Core', 'wp-rest-api-toolbox' );
+
+			register_setting( $key, $key, array( $this, 'sanitize_core_settings') );
+
+			$section = 'core';
+
+			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
+
+			add_settings_field( 'disable-all-core-endpoints', __( 'Disable WordPress Core Endpoints', 'wp-rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'disable-all-core-endpoints', 'after' => '' ) );
+
+		}
+
+
+		private function register_ssl_settings() {
+			$key = $this->settings_key_ssl;
+			$this->plugin_settings_tabs[$key] = __( 'SSL', 'wp-rest-api-toolbox' );
+
+			register_setting( $key, $key, array( $this, 'sanitize_ssl_settings') );
+
+			$section = 'ssl';
+
+			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
+
+			add_settings_field( 'require-ssl', __( 'Require SSL', 'wp-rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'require-ssl', 'after' => '' ) );
+
+		}
+
 		public function sanitize_general_settings( $settings ) {
+
+			return $settings;
+		}
+
+
+		public function sanitize_core_settings( $settings ) {
+
+			return $settings;
+		}
+
+
+		public function sanitize_ssl_settings( $settings ) {
 
 			return $settings;
 		}

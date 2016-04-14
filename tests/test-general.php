@@ -1,6 +1,6 @@
 <?php
 
-class SampleTest extends WP_UnitTestCase {
+class REST_API_Toolbox_Test_General extends WP_UnitTestCase {
 
 	function test_rest_api_disabled() {
 

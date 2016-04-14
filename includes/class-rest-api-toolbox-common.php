@@ -10,6 +10,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			
 			add_filter( 'rest_enabled', array( $this, 'rest_api_disabled_filter' ) );
 
+			add_filter( 'rest_pre_dispatch', array( $this, 'disallow_non_ssl' ), 10, 3 );
+
 		}
 
 		public function rest_api_disabled_filter( $enabled ) {
@@ -23,6 +25,21 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 			}
 			return $enabled;
+		}
+
+
+		public function disallow_non_ssl( $response, $server, $request ) {
+			if ( ! is_ssl() ) {
+
+				$settings = new REST_API_Toolbox_Settings();
+				$require_ssl = $settings->setting_is_enabled( 'ssl', 'require-ssl' );
+
+				if ( $require_ssl ) {
+					$response = new WP_Error( 'rest_forbidden', __( "SSL is required to access the REST API" ), array( 'status' => 403 ) );
+				}
+
+			}
+			return $response;
 		}
 
 

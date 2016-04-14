@@ -1,6 +1,6 @@
 === REST API Toolbox ===
 Contributors: gungeekatx
-Tags: rest api, rest
+Tags: rest api, rest, wp rest api
 Donate link: https://petenelson.io/
 Requires at least: 4.0
 Tested up to: 4.5
@@ -21,7 +21,7 @@ Allows tweaking of several REST API settings
 
 == Installation ==
 
-1. Upload wp-rest-api-toolbox to the `/wp-content/plugins/` directory
+1. Upload rest-api-toolbox to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Visit the Settings -> REST API Toolbox page to customize
 

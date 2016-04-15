@@ -2,7 +2,7 @@
 Contributors: gungeekatx
 Tags: rest api, rest, wp rest api
 Donate link: https://petenelson.io/
-Requires at least: 4.0
+Requires at least: 4.4
 Tested up to: 4.5
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -17,6 +17,7 @@ Allows tweaking of several REST API settings
 * Disaple the REST API
 * Remove WordPress core endpoints
 * Force SSL
+* WP-CLI commands: wp rest-api-toolbox
 
 == Installation ==
 

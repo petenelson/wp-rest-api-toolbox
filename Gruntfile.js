@@ -30,6 +30,19 @@ module.exports = function( grunt ) {
 			wp: [ "release" ]
 		},
 
+		phplint: {
+			options: {
+				limit: 10,
+				stdout: true,
+				stderr: true
+			},
+			files: [
+				'admin/**/*.php',
+				'includes/*.php',
+				'*.php'
+			]
+		},
+
 		phpunit: {
 			'default': {
 				cmd: 'phpunit',

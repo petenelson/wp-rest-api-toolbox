@@ -9,6 +9,8 @@ class REST_API_Toolbox_Test_SSL extends WP_UnitTestCase {
 
 		$this->assertEquals( true, $settings->setting_is_enabled( 'ssl', 'require-ssl' ) );
 
+		// TODO figure out fake SSL request to local site to test
+
 	}
 
 	function test_ssl_not_required() {

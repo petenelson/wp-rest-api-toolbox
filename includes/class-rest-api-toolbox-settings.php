@@ -26,12 +26,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 		}
 
-		public function get_default_settings() {
-			return array(
-				'disable-rest-api'         => '0',
-			);
-		}
-
 
 		public function activation_hook() {
 

@@ -63,3 +63,8 @@ foreach( $plugin->get_class_names() as $class_name ) {
 		}
 	}
 }
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once REST_API_TOOLBOX_ROOT . 'includes/wp-cli/setup.php';
+}
+ 

@@ -129,7 +129,7 @@ install_rest_api() {
 	fi
 }
 
-# install_wp
-# install_test_suite
-# install_db
+install_wp
+install_test_suite
+install_db
 install_rest_api

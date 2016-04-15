@@ -13,6 +13,7 @@ WP_VERSION=${5-latest}
 
 WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
+WP_PLUGINS_DIR=${WP_PLUGINS_DIR-/tmp/wordpress/wp-content/plugins}
 
 download() {
     if [ `which curl` ]; then
@@ -113,8 +114,22 @@ install_db() {
 
 	# create database
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+
+
+}
+
+install_rest_api() {
+
+     if [ ! -d "$WP_PLUGINS_DIR/rest-api" ]; then
+
+		mkdir -p $WP_PLUGINS_DIR/rest-api
+		download https://downloads.wordpress.org/plugin/rest-api.2.0-beta13.zip  $WP_CORE_DIR/rest-api.2.0-beta13.zip
+		unzip -q $WP_CORE_DIR/rest-api.2.0-beta13.zip -d $WP_PLUGINS_DIR
+
+	fi
 }
 
 install_wp
 install_test_suite
 install_db
+install_rest_api

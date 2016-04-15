@@ -88,8 +88,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'remove-all-core-endpoints', __( 'Remove All WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
-				array( 'key' => $key, 'name' => 'remove-all-core-endpoints', 'after' => '' ) );
+			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Routes', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' ) );
 
 		}
 

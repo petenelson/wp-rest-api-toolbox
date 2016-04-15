@@ -11,7 +11,7 @@ require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
 	/// manually load the REST API plugin
-	require dirname( dirname( __FILE__ ) ) . '/../rest-api/plugin.php';
+	require dirname( dirname( plugin_dir_path( __FILE__ ) ) ) . '/rest-api/plugin.php';
 	require dirname( dirname( __FILE__ ) ) . '/rest-api-toolbox.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );

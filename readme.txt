@@ -19,6 +19,8 @@ Allows tweaking of several REST API settings
 * Force SSL
 * WP-CLI commands: wp rest-api-toolbox
 
+(Creative commons toolbox image provided by James Tworow https://www.flickr.com/photos/sherlock77/)
+
 == Installation ==
 
 1. Upload rest-api-toolbox to the `/wp-content/plugins/` directory

@@ -120,17 +120,16 @@ install_db() {
 
 install_rest_api() {
 
-     if [ ! -d "$WP_PLUGINS_DIR/rest-api" ]; then
+     if [ ! -d "$WP_CORE_DIR/wp-content/plugins/rest-api" ]; then
 
-		mkdir -p $WP_PLUGINS_DIR/rest-api
+		mkdir -p $WP_CORE_DIR/wp-content/plugins/rest-api
 		download https://downloads.wordpress.org/plugin/rest-api.2.0-beta13.zip  $WP_CORE_DIR/rest-api.2.0-beta13.zip
-		unzip $WP_CORE_DIR/rest-api.2.0-beta13.zip -d $WP_PLUGINS_DIR
-		ls -la $WP_PLUGINS_DIR
-		ls -la $WP_PLUGINS_DIR/rest-api
+		unzip $WP_CORE_DIR/rest-api.2.0-beta13.zip -d $WP_CORE_DIR/wp-content/plugins
+		ls -la $WP_CORE_DIR/wp-content/plugins/rest-api
 	fi
 }
 
-install_wp
-install_test_suite
-install_db
+# install_wp
+# install_test_suite
+# install_db
 install_rest_api

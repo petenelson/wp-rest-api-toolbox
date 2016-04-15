@@ -11,7 +11,7 @@ php:
 
 env:
   - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=4.0 WP_MULTISITE=0
+  - WP_VERSION=4.4 WP_MULTISITE=0
 
 matrix:
   include:
@@ -24,6 +24,6 @@ install:
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - bash bin/install-wp-tests.sh wordpress_test_rapt root '' localhost $WP_VERSION
 
 script: phpunit

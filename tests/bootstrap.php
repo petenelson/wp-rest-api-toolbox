@@ -11,6 +11,9 @@ require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
 	/// manually load the REST API plugin
+	var_dump( dirname( getcwd() ) );
+	var_dump( dirname( getcwd() ) . '/rest-api/plugin.php' );
+
 	require dirname( getcwd() ) . '/rest-api/plugin.php';
 	require dirname( dirname( __FILE__ ) ) . '/rest-api-toolbox.php';
 }

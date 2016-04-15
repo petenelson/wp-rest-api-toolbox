@@ -124,8 +124,9 @@ install_rest_api() {
 
 		mkdir -p $WP_PLUGINS_DIR/rest-api
 		download https://downloads.wordpress.org/plugin/rest-api.2.0-beta13.zip  $WP_CORE_DIR/rest-api.2.0-beta13.zip
-		unzip -q $WP_CORE_DIR/rest-api.2.0-beta13.zip -d $WP_PLUGINS_DIR
-
+		unzip $WP_CORE_DIR/rest-api.2.0-beta13.zip -d $WP_PLUGINS_DIR
+		ls -la $WP_PLUGINS_DIR
+		ls -la $WP_PLUGINS_DIR/rest-api
 	fi
 }
 

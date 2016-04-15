@@ -8,13 +8,13 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		public function plugins_loaded() {
 			
-			add_filter( 'rest_enabled',         array( $this, 'rest_api_disabled_filter' ) );
+			add_filter( 'rest_enabled',         array( $this, 'rest_api_disabled_filter' ), 100 );
 
-			add_filter( 'rest_pre_dispatch',    array( $this, 'disallow_non_ssl' ), 10, 3 );
+			add_filter( 'rest_pre_dispatch',    array( $this, 'disallow_non_ssl' ), 100, 3 );
 
 
-			add_filter( 'rest_index',           array( $this, 'remove_wordpress_core_namespace' ), 10, 3 );
-			add_filter( 'rest_endpoints',       array( $this, 'remove_wordpress_core_endpoints'), 10, 1 );
+			add_filter( 'rest_index',           array( $this, 'remove_wordpress_core_namespace' ), 100, 3 );
+			add_filter( 'rest_endpoints',       array( $this, 'remove_wordpress_core_endpoints'), 100, 1 );
 
 		}
 

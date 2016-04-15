@@ -13,14 +13,16 @@ function _manually_load_plugin() {
 	// manually load the REST API plugin
 
 	// getting odd directory names locally vs Travis CI, hopefully this fixes it
-	$current_dir = dirname( getcwd() );
-	if ( false === stripos( $current_dir, 'wp-content/plugins' ) ) {
-		$current_dir = trailingslashit( $current_dir ) . 'wp-content/plugins';
-	}
+	// $current_dir = dirname( getcwd() );
+	// if ( false === stripos( $current_dir, 'wp-content/plugins' ) ) {
+	// 	$current_dir = trailingslashit( $current_dir ) . 'wp-content/plugins';
+	// }
 
-	require $current_dir . '/rest-api/plugin.php';
+	// require $current_dir . '/rest-api/plugin.php';
 
 	// now load our plugin
+	var_dump( dirname( dirname( __FILE__ ) ) . '/rest-api-toolbox.php' );
+	die();
 	require dirname( dirname( __FILE__ ) ) . '/rest-api-toolbox.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );

@@ -50,8 +50,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		public function remove_wordpress_core_namespace( $response ) {
 
 			$settings = new REST_API_Toolbox_Settings();
-			$remove_all_core_endpoints = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
-			if ( $remove_all_core_endpoints ) {
+			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
+			if ( $remove_all ) {
 				if ( ! empty( $response->data ) && ! empty( $response->data['namespaces'] ) ) {
 					for( $i = count( $response->data['namespaces'] ) - 1; $i >= 0; $i-- ) {
 						if ( 'wp/v2' === $response->data['namespaces'][ $i ] ) {
@@ -69,9 +69,9 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		public function remove_wordpress_core_endpoints( $endpoints ) {
 
 			$settings = new REST_API_Toolbox_Settings();
-			$remove_all_core_endpoints = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
+			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
 
-			if ( $remove_all_core_endpoints ) {
+			if ( $remove_all ) {
 				foreach ( array_keys( $endpoints ) as $endpoint ) {
 					if ( 0 === stripos( $endpoint, '/wp/v2' ) ) {
 						unset( $endpoints[ $endpoint ] );

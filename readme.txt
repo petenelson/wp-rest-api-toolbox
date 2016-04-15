@@ -17,6 +17,7 @@ Allows tweaking of several REST API settings
 * Disaple the REST API
 * Remove WordPress core endpoints
 * Force SSL
+* WP-CLI commands: wp rest-api-toolbox
 
 == Installation ==
 

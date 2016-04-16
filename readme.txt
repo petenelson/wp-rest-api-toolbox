@@ -40,6 +40,7 @@ Have any questions?  We can answer them here?
 
 = 1.1.0 =
 * Added support to remove specific core endpoints
+* Added JSONP
 
 = 1.0.0 =
 * Initial release
@@ -48,6 +49,7 @@ Have any questions?  We can answer them here?
 
 = 1.1.0 =
 * Added support to remove specific core endpoints
+* Added JSONP
 
 = 1.0.0 =
 * Initial release

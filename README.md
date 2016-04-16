@@ -38,10 +38,10 @@ Have any questions?  We can answer them here?
 ## Screenshots ##
 
 ### 1. General admin settings ###
-![General admin settings](http://ps.w.org/rest-api-toolbox/assets/screenshot-1.png)
+![General admin settings](https://raw.githubusercontent.com/petenelson/wp-rest-api-toolbox/master/assets/screenshot-1.png)
 
 ### 2. WordPress core settings ###
-![WordPress core settings](http://ps.w.org/rest-api-toolbox/assets/screenshot-2.png)
+![WordPress core settings](https://raw.githubusercontent.com/petenelson/wp-rest-api-toolbox/master/assets/screenshot-2.png)
 
 
 ## Changelog ##

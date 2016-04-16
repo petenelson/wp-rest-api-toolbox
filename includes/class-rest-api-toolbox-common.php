@@ -21,6 +21,28 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		}
 
+
+		public function core_namespace() {
+			return apply_filters( 'rest-api-toolbox-core-namespace', 'wp/v2' );
+		}
+
+
+		public function core_endpoints() {
+			$endpoints = array(
+				'posts',
+				'pages',
+				'users',
+				'media',
+				'categories',
+				'tags',
+				'comments',
+				'taxonomies',
+				'types',
+				'statuses',
+			);
+			return apply_filters( 'rest-api-toolbox-core-endpoints', $endpoints );
+		}
+
 		public function rest_api_disabled_filter( $enabled ) {
 			if ( $enabled ) {
 				$settings = new REST_API_Toolbox_Settings();
@@ -71,7 +93,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			if ( $remove_all ) {
 				if ( ! empty( $response->data ) && ! empty( $response->data['namespaces'] ) ) {
 					for( $i = count( $response->data['namespaces'] ) - 1; $i >= 0; $i-- ) {
-						if ( 'wp/v2' === $response->data['namespaces'][ $i ] ) {
+						if ( $this->core_namespace() === $response->data['namespaces'][ $i ] ) {
 							unset( $response->data['namespaces'][ $i ] );
 							$response->data['namespaces'] = array_values( $response->data['namespaces'] );
 							break;
@@ -89,7 +111,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
 
 			if ( $remove_all ) {
-				$routes = $this->remove_endpoint( $routes, '/wp/v2' );
+				$routes = $this->remove_endpoint( $routes, '/' . $this->core_namespace() );
 			}
 
 			return $routes;

@@ -33,7 +33,8 @@ Have any questions?  We can answer them here?
 
 == Screenshots ==
 
-1. Admin settings
+1. General admin settings
+2. WordPress core settings
 
 == Changelog ==
 

@@ -82,6 +82,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		private function register_core_settings() {
+			$common = new REST_API_Toolbox_Common();
 			$key = $this->settings_key_core;
 			$this->plugin_settings_tabs[$key] = __( 'Core', 'rest-api-toolbox' );
 
@@ -94,8 +95,19 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' ) );
 
-			add_settings_field( 'remove-endpoint|/wp/v2/media', __( 'Remove Endpoint: media', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
-				array( 'key' => $key, 'name' => 'remove-endpoint|/wp/v2/media', 'after' => '' ) );
+			$namespace = $common->core_namespace();
+			$endpoints = $common->core_endpoints();
+
+			foreach( $endpoints as $endpoint ) {
+				$name = 'remove-endpoint|/' . $namespace . '/' . $endpoint;
+				add_settings_field( $name, sprintf( __( 'Remove Endpoint: %s', 'rest-api-toolbox' ), $endpoint),
+					array( $this, 'settings_yes_no' ),
+					$key,
+					$section,
+					array( 'key' => $key, 'name' => $name, 'after' => '' )
+					);
+			}
+
 		}
 
 

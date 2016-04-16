@@ -37,8 +37,11 @@ Have any questions?  We can answer them here?
 
 ## Screenshots ##
 
-### 1. Admin settings ###
-![Admin settings](http://ps.w.org/rest-api-toolbox/assets/screenshot-1.png)
+### 1. General admin settings ###
+![General admin settings](http://ps.w.org/rest-api-toolbox/assets/screenshot-1.png)
+
+### 2. WordPress core settings ###
+![WordPress core settings](http://ps.w.org/rest-api-toolbox/assets/screenshot-2.png)
 
 
 ## Changelog ##
@@ -50,6 +53,9 @@ Have any questions?  We can answer them here?
 * Initial release
 
 ## Upgrade Notice ##
+
+### 1.1.0 ###
+* Added support to remove specific core endpoints
 
 ### 1.0.0 ###
 * Initial release

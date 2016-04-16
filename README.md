@@ -46,18 +46,18 @@ Have any questions?  We can answer them here?
 
 ## Changelog ##
 
-### 1.1.0 ###
+### 1.1.0 April 16, 2016 ###
 * Added support to remove specific core endpoints
 * Added JSONP
 
-### 1.0.0 ###
+### 1.0.0 April 15, 2016 ###
 * Initial release
 
 ## Upgrade Notice ##
 
-### 1.1.0 ###
+### 1.1.0 April 16, 2016 ###
 * Added support to remove specific core endpoints
 * Added JSONP
 
-### 1.0.0 ###
+### 1.0.0 April 15, 2016 ###
 * Initial release

@@ -19,10 +19,22 @@ module.exports = function( grunt ) {
 		},
 
 		wp_readme_to_markdown: {
+			options: {
+				screenshot_url: "http://ps.w.org/{plugin}/assets/{screenshot}.png",
+				},
 			your_target: {
 				files: {
 					'README.md': 'readme.txt'
 				}
+			},
+		},
+
+		insert: {
+			options: {},
+			badges: {
+				src: "badges.md",
+				dest: "README.md",
+				match: "**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  "
 			},
 		},
 
@@ -99,7 +111,8 @@ module.exports = function( grunt ) {
 		'grunt-contrib-clean',
 		'grunt-contrib-copy',
 		'grunt-wp-i18n',
-		'grunt-wp-readme-to-markdown'
+		'grunt-wp-readme-to-markdown',
+		'grunt-insert'
 		];
 
 	for	( var i = 0; i < tasks.length; i++ ) {
@@ -108,7 +121,7 @@ module.exports = function( grunt ) {
 
 
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
-	grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
+	grunt.registerTask( 'readme', ['wp_readme_to_markdown', 'insert:badges'] );
 
 	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
 

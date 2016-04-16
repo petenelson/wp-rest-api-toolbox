@@ -45,5 +45,8 @@ Have any questions?  We can answer them here?
 
 == Upgrade Notice ==
 
+= 1.1.0 =
+* Added support to remove specific core endpoints
+
 = 1.0.0 =
 * Initial release

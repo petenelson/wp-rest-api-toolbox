@@ -88,9 +88,11 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Routes', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' ) );
 
+			add_settings_field( 'remove-endpoint|/wp/v2/media', __( 'Remove Endpoint: media', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'remove-endpoint|/wp/v2/media', 'after' => '' ) );
 		}
 
 
@@ -137,7 +139,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function change_enabled_setting( $key, $setting, $enabled ) {
-			$options_key = $this->options_key( $key, $setting );
+			$options_key = $this->options_key( $key );
 			$option = get_option( $options_key );
 			if ( false === $option ) {
 				$option = array();
@@ -156,7 +158,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 		public function setting_get( $key, $setting, $value ) {
 
-			$args = wp_parse_args( get_option( $this->options_key( $key, $setting ) ),
+			$args = wp_parse_args( get_option( $this->options_key( $key ) ),
 				array(
 					$setting => $value,
 				)
@@ -166,7 +168,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		private function options_key( $key, $setting ) {
+		public function options_key( $key ) {
 			return "{$this->settings_page}-{$key}";
 		}
 
@@ -300,7 +302,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function admin_menu() {
-			add_options_page( 'REST API Toolbox' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( 'REST API Toolbox ' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 

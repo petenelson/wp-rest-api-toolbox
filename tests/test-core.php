@@ -1,6 +1,6 @@
 <?php
 
-class REST_API_Toolbox_Test_Core extends WP_UnitTestCase {
+class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 	function test_remove_core() {
 
@@ -68,4 +68,30 @@ class REST_API_Toolbox_Test_Core extends WP_UnitTestCase {
 		$this->assertTrue( $has_wp_route );
 
 	}
+
+	function core_endpoints() {
+		return array(
+			'/wp/v2/media',
+			);
+	}
+
+
+	function test_remove_core_endpoints() {
+
+		$settings = new REST_API_Toolbox_Settings();
+
+		foreach( $this->core_endpoints() as $endpoint ) {
+
+			$remove_endpoint = 'remove-endpoint|' . $endpoint;
+
+			$settings->change_enabled_setting( 'core', $remove_endpoint, true );
+
+			$this->assertEquals( true, $settings->setting_is_enabled( 'core', $remove_endpoint ) );
+			$this->assertFalse( $this->endpoint_exists( $endpoint, $endpoint ) );
+
+		}
+
+	}
+
+
 }

@@ -15,7 +15,9 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 
 			add_filter( 'rest_index',           array( $this, 'remove_wordpress_core_namespace' ), 100, 3 );
-			add_filter( 'rest_endpoints',       array( $this, 'remove_wordpress_core_endpoints'), 100, 1 );
+			add_filter( 'rest_endpoints',       array( $this, 'remove_all_core_endpoints'), 100, 1 );
+
+			add_filter( 'rest_endpoints',       array( $this, 'remove_selected_core_endpoints'), 100, 1 );
 
 		}
 
@@ -81,21 +83,59 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_wordpress_core_endpoints( $endpoints ) {
+		public function remove_all_core_endpoints( $routes ) {
 
 			$settings = new REST_API_Toolbox_Settings();
 			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
 
 			if ( $remove_all ) {
-				foreach ( array_keys( $endpoints ) as $endpoint ) {
-					if ( 0 === stripos( $endpoint, '/wp/v2' ) ) {
-						unset( $endpoints[ $endpoint ] );
+				$routes = $this->remove_endpoint( $routes, '/wp/v2' );
+			}
+
+			return $routes;
+		}
+
+
+		public function remove_selected_core_endpoints( $routes ) {
+
+			$settings = new REST_API_Toolbox_Settings();
+			$core_settings = get_option( $settings->options_key( 'core' ) );
+			$core_settings = ! is_array( $core_settings ) ? array() : $core_settings;
+
+			$pattern = "/remove-endpoint\\|(.+)/";
+			$endpoints = array();
+
+			foreach ( $core_settings as $setting => $enabled ) {
+				if ( '1' === $enabled ) {
+					$matches = array();
+					if ( 1 === preg_match( $pattern, $setting, $matches ) ) {
+						if ( ! empty( $matches ) && count( $matches ) > 0 && ! empty( $matches[1] ) ) {
+							$endpoints[] = $matches[1];
+						}
 					}
 				}
 			}
 
-			return $endpoints;
+			$endpoints = apply_filters( 'rest-api-toolbox-remove-endpoints', $endpoints );
+
+			foreach ( $endpoints as $endpoint ) {
+				$routes = $this->remove_endpoint( $routes, $endpoint );
+			}
+
+			return $routes;
+
 		}
+
+
+		public function remove_endpoint( $routes, $remove_endpoint ) {
+			foreach ( array_keys( $routes ) as $endpoint ) {
+				if ( 0 === strpos( $endpoint, $remove_endpoint ) ) {
+					unset( $routes[ $endpoint ] );
+				}
+			}
+			return $routes;
+		}
+
 
 	}
 

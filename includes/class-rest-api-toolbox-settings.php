@@ -55,16 +55,18 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function admin_init() {
-			$this->register_general_settings();
-			$this->register_core_settings();
-			$this->register_ssl_settings();
+
+			foreach( $this->settings_keys() as $key => $title ) {
+				call_user_func( array( $this, "register_{$key}_settings" ), $title );
+			}
+
 			$this->register_help_tab();
 		}
 
 
-		private function register_general_settings() {
+		private function register_general_settings( $title ) {
 			$key = $this->settings_key_general;
-			$this->plugin_settings_tabs[$key] = __( 'General' );
+			$this->plugin_settings_tabs[$key] = $title;
 
 			register_setting( $key, $key, array( $this, 'sanitize_general_settings') );
 
@@ -75,12 +77,24 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-rest-api', 'after' => '' ) );
 
+			add_settings_field( 'disable-jsonp', __( 'Disable JSONP Support', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'disable-jsonp', 'after' => '' ) );
+
+			add_settings_field( 'rest-api-prefix', __( 'REST API Prefix', 'rest-api-toolbox' ), array( $this, 'settings_input' ), $key, $section,
+				array(
+					'key' => $key,
+					'name' =>
+					'rest-api-prefix',
+					'after' => __( 'Custom prefix, default is wp-json', 'rest-api-toolbox' ),
+					)
+				);
 		}
 
 
-		private function register_core_settings() {
+		private function register_core_settings( $title ) {
+			$common = new REST_API_Toolbox_Common();
 			$key = $this->settings_key_core;
-			$this->plugin_settings_tabs[$key] = __( 'Core', 'rest-api-toolbox' );
+			$this->plugin_settings_tabs[$key] = $title;
 
 			register_setting( $key, $key, array( $this, 'sanitize_core_settings') );
 
@@ -88,15 +102,28 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Routes', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' ) );
+
+			$namespace = $common->core_namespace();
+			$endpoints = $common->core_endpoints();
+
+			foreach( $endpoints as $endpoint ) {
+				$name = 'remove-endpoint|/' . $namespace . '/' . $endpoint;
+				add_settings_field( $name, sprintf( __( 'Remove Endpoint: %s', 'rest-api-toolbox' ), $endpoint),
+					array( $this, 'settings_yes_no' ),
+					$key,
+					$section,
+					array( 'key' => $key, 'name' => $name, 'after' => '' )
+					);
+			}
 
 		}
 
 
-		private function register_ssl_settings() {
+		private function register_ssl_settings( $title ) {
 			$key = $this->settings_key_ssl;
-			$this->plugin_settings_tabs[$key] = __( 'SSL', 'rest-api-toolbox' );
+			$this->plugin_settings_tabs[$key] = $title;
 
 			register_setting( $key, $key, array( $this, 'sanitize_ssl_settings') );
 
@@ -110,6 +137,10 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 		public function sanitize_general_settings( $settings ) {
+
+			if ( ! empty( $settings['rest-api-prefix'] ) ) {
+				$settings['rest-api-prefix'] = sanitize_title( trim( $settings['rest-api-prefix'] ) );
+			}
 
 			return $settings;
 		}
@@ -137,7 +168,11 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function change_enabled_setting( $key, $setting, $enabled ) {
-			$options_key = $this->options_key( $key, $setting );
+			if ( ! $this->settings_key_is_valid( $key ) ) {
+				return false;
+			}
+
+			$options_key = $this->options_key( $key );
 			$option = get_option( $options_key );
 			if ( false === $option ) {
 				$option = array();
@@ -145,7 +180,40 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			$option[ $setting ] = $enabled ? '1' : '0';
 
-			update_option( $options_key, $option );
+			return update_option( $options_key, $option );
+		}
+
+
+		public function change_setting( $key, $setting, $value ) {
+			if ( ! $this->settings_key_is_valid( $key ) ) {
+				return false;
+			}
+
+			$options_key = $this->options_key( $key );
+			$option = get_option( $options_key );
+			if ( false === $option ) {
+				$option = array();
+			}
+
+			$option[ $setting ] = $value;
+
+			$option = call_user_func( array( $this, "sanitize_{$key}_settings" ), $option );
+
+			return update_option( $options_key, $option );
+		}
+
+
+		public function settings_key_is_valid( $key ) {
+			return in_array( $key, array_keys( $this->settings_keys() ) );
+		}
+
+
+		public function settings_keys() {
+			return array(
+				'general'  => __( 'General', 'rest-api-toolbox' ),
+				'core'     => __( 'Core', 'rest-api-toolbox' ),
+				'ssl'      => __( 'SSL', 'rest-api-toolbox' ),
+			);
 		}
 
 
@@ -154,9 +222,9 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		public function setting_get( $key, $setting, $value ) {
+		public function setting_get( $key, $setting, $value = '' ) {
 
-			$args = wp_parse_args( get_option( $this->options_key( $key, $setting ) ),
+			$args = wp_parse_args( get_option( $this->options_key( $key ) ),
 				array(
 					$setting => $value,
 				)
@@ -166,7 +234,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		private function options_key( $key, $setting ) {
+		public function options_key( $key ) {
 			return "{$this->settings_page}-{$key}";
 		}
 
@@ -300,7 +368,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function admin_menu() {
-			add_options_page( 'REST API Toolbox' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( 'REST API Toolbox ' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 
@@ -323,7 +391,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
 			if ( ! empty( $settings_updated ) ) {
-				do_action( 'rest-api-toolbox-flush-sizes-transient' );
+				do_action( 'rest-api-toolbox-settings-updated' );
+				flush_rewrite_rules();
 			}
 
 		}

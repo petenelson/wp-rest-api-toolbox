@@ -4,9 +4,13 @@
 **Donate link:** https://petenelson.io/  
 **Requires at least:** 4.4  
 **Tested up to:** 4.5  
-**Stable tag:** 1.0.0  
+**Stable tag:** 1.1.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+
+[![Code Climate](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox/badges/gpa.svg)](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox)
+[![Test Coverage](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox/badges/coverage.svg)](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox/coverage)
+[![Travis CI](https://travis-ci.org/petenelson/wp-rest-api-toolbox.svg)](https://travis-ci.org/petenelson/wp-rest-api-toolbox/)
 
 Allows tweaking of several REST API settings
 
@@ -33,16 +37,28 @@ Have any questions?  We can answer them here?
 
 ## Screenshots ##
 
-### 1. Admin settings ###
-![Admin settings](http://s.wordpress.org/extend/plugins/rest-api-toolbox/screenshot-1.png)
+### 1. General admin settings ###
+![General admin settings](https://raw.githubusercontent.com/petenelson/wp-rest-api-toolbox/master/assets/screenshot-1.png)
+
+### 2. WordPress core settings ###
+![WordPress core settings](https://raw.githubusercontent.com/petenelson/wp-rest-api-toolbox/master/assets/screenshot-2.png)
 
 
 ## Changelog ##
 
-### 1.0.0 ###
+### 1.1.0 April 16, 2016 ###
+* Change REST API prefix
+* Remove specific core endpoints
+* Disable JSONP
+
+### 1.0.0 April 15, 2016 ###
 * Initial release
 
 ## Upgrade Notice ##
 
-### 1.0.0 ###
+### 1.1.0 April 16, 2016 ###
+* Remove specific core endpoints
+* Disable JSONP
+
+### 1.0.0 April 15, 2016 ###
 * Initial release

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-# CODECLIMATE_REPO_TOKEN=b729d87214a7f754c60a4159f52eab56a3137366502e098b71ccbae22dbfcb73 ./vendor/bin/test-reporter
+CODECLIMATE_REPO_TOKEN=e9acdd855fa95cecc87ae5cdb1e329a9a78d97138d0f05f66c45ad86fb215f91 ./vendor/bin/test-reporter

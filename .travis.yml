@@ -27,3 +27,10 @@ before_script:
   - bash bin/install-wp-tests.sh wordpress_test_rapt root '' localhost $WP_VERSION
 
 script: phpunit
+
+after_script:
+  - bash bin/upload-coverage.sh
+
+addons:
+    code_climate:
+        repo_token: e9acdd855fa95cecc87ae5cdb1e329a9a78d97138d0f05f66c45ad86fb215f91

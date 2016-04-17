@@ -75,10 +75,14 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-rest-api', 'after' => '' ) );
 
+			add_settings_field( 'disable-jsonp', __( 'Disable JSONP Support', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+				array( 'key' => $key, 'name' => 'disable-jsonp', 'after' => '' ) );
+
 		}
 
 
 		private function register_core_settings() {
+			$common = new REST_API_Toolbox_Common();
 			$key = $this->settings_key_core;
 			$this->plugin_settings_tabs[$key] = __( 'Core', 'rest-api-toolbox' );
 
@@ -88,8 +92,21 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 
-			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Routes', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' ) );
+
+			$namespace = $common->core_namespace();
+			$endpoints = $common->core_endpoints();
+
+			foreach( $endpoints as $endpoint ) {
+				$name = 'remove-endpoint|/' . $namespace . '/' . $endpoint;
+				add_settings_field( $name, sprintf( __( 'Remove Endpoint: %s', 'rest-api-toolbox' ), $endpoint),
+					array( $this, 'settings_yes_no' ),
+					$key,
+					$section,
+					array( 'key' => $key, 'name' => $name, 'after' => '' )
+					);
+			}
 
 		}
 
@@ -137,7 +154,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function change_enabled_setting( $key, $setting, $enabled ) {
-			$options_key = $this->options_key( $key, $setting );
+			$options_key = $this->options_key( $key );
 			$option = get_option( $options_key );
 			if ( false === $option ) {
 				$option = array();
@@ -156,7 +173,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 		public function setting_get( $key, $setting, $value ) {
 
-			$args = wp_parse_args( get_option( $this->options_key( $key, $setting ) ),
+			$args = wp_parse_args( get_option( $this->options_key( $key ) ),
 				array(
 					$setting => $value,
 				)
@@ -166,7 +183,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		private function options_key( $key, $setting ) {
+		public function options_key( $key ) {
 			return "{$this->settings_page}-{$key}";
 		}
 
@@ -300,7 +317,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		public function admin_menu() {
-			add_options_page( 'REST API Toolbox' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
+			add_options_page( 'REST API Toolbox ' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 

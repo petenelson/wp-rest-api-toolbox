@@ -1,6 +1,6 @@
 <?php
 
-class REST_API_Toolbox_Test_Core extends WP_UnitTestCase {
+class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 	function test_remove_core() {
 
@@ -68,4 +68,45 @@ class REST_API_Toolbox_Test_Core extends WP_UnitTestCase {
 		$this->assertTrue( $has_wp_route );
 
 	}
+
+	function test_remove_core_endpoints() {
+
+		$settings    = new REST_API_Toolbox_Settings();
+		$common      = new REST_API_Toolbox_Common();
+		$namespace   = $common->core_namespace();
+
+		foreach( $common->core_endpoints() as $endpoint ) {
+
+			$endpoint = '/' . $namespace . '/' . $endpoint;
+			$remove_endpoint = 'remove-endpoint|' . $endpoint;
+
+			$settings->change_enabled_setting( 'core', $remove_endpoint, true );
+
+			$this->assertEquals( true, $settings->setting_is_enabled( 'core', $remove_endpoint ) );
+			$this->assertFalse( $this->endpoint_exists( $endpoint ), $endpoint );
+
+		}
+
+	}
+
+	function test_do_not_remove_core_endpoints() {
+
+		$settings    = new REST_API_Toolbox_Settings();
+		$common      = new REST_API_Toolbox_Common();
+		$namespace   = $common->core_namespace();
+
+		foreach( $common->core_endpoints() as $endpoint ) {
+
+			$endpoint = '/' . $namespace . '/' . $endpoint;
+			$remove_endpoint = 'remove-endpoint|' . $endpoint;
+
+			$settings->change_enabled_setting( 'core', $remove_endpoint, false );
+
+			$this->assertEquals( false, $settings->setting_is_enabled( 'core', $remove_endpoint ) );
+			$this->assertTrue( $this->endpoint_exists( $endpoint ), $endpoint );
+
+		}
+
+	}
+
 }

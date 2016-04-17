@@ -222,7 +222,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		public function setting_get( $key, $setting, $value ) {
+		public function setting_get( $key, $setting, $value = '' ) {
 
 			$args = wp_parse_args( get_option( $this->options_key( $key ) ),
 				array(
@@ -391,7 +391,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
 			if ( ! empty( $settings_updated ) ) {
-				do_action( 'rest-api-toolbox-flush-sizes-transient' );
+				do_action( 'rest-api-toolbox-settings-updated' );
+				flush_rewrite_rules();
 			}
 
 		}

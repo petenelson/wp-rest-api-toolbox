@@ -47,8 +47,9 @@ Have any questions?  We can answer them here?
 ## Changelog ##
 
 ### 1.1.0 April 16, 2016 ###
-* Added support to remove specific core endpoints
-* Added JSONP
+* Change REST API prefix
+* Remove specific core endpoints
+* Disable JSONP
 
 ### 1.0.0 April 15, 2016 ###
 * Initial release
@@ -56,8 +57,8 @@ Have any questions?  We can answer them here?
 ## Upgrade Notice ##
 
 ### 1.1.0 April 16, 2016 ###
-* Added support to remove specific core endpoints
-* Added JSONP
+* Remove specific core endpoints
+* Disable JSONP
 
 ### 1.0.0 April 15, 2016 ###
 * Initial release

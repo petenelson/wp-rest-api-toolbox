@@ -21,7 +21,14 @@ class REST_API_Toolbox_Plugin {
 	}
 
 	function get_required_files() {
-		$include_files = array( 'common', 'i18n', 'settings' );
+		$include_files = array(
+			'base',
+			'common',
+			'prefix',
+			'i18n',
+			'settings'
+			);
+
 		$files = array();
 		foreach ( $include_files as $include_file ) {
 			$files[] = REST_API_TOOLBOX_ROOT . 'includes/class-rest-api-toolbox-' . $include_file . '.php';
@@ -31,7 +38,9 @@ class REST_API_Toolbox_Plugin {
 
 	function get_class_names() {
 		return array(
+			'REST_API_Toolbox_Base',
 			'REST_API_Toolbox_Common',
+			'REST_API_Toolbox_Prefix',
 			'REST_API_Toolbox_i18n',
 			'REST_API_Toolbox_Settings',
 			);
@@ -57,7 +66,9 @@ foreach( $plugin->get_class_names() as $class_name ) {
 	}
 
 	foreach ( $classes as $class ) {
-		add_action( 'plugins_loaded', array( $class, 'plugins_loaded' ) );
+		if ( method_exists( $class, 'plugins_loaded' ) ) {
+			add_action( 'plugins_loaded', array( $class, 'plugins_loaded' ) );
+		}
 		if ( method_exists( $class, 'activation_hook' ) ) {
 			register_activation_hook( __FILE__, array( $class, 'activation_hook' ) );
 		}

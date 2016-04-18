@@ -22,16 +22,21 @@ class REST_API_Toolbox_Plugin {
 
 	function get_required_files() {
 		$include_files = array(
-			'base',
-			'common',
-			'prefix',
-			'i18n',
-			'settings'
+			'class-rest-api-toolbox-base',
+			'class-rest-api-toolbox-common',
+			'class-rest-api-toolbox-prefix',
+			'class-rest-api-toolbox-i18n',
+			'settings/class-rest-api-toolbox-settings-base',
+			'settings/class-rest-api-toolbox-settings',
+			'settings/class-rest-api-toolbox-settings-general',
+			'settings/class-rest-api-toolbox-settings-core',
+			'settings/class-rest-api-toolbox-settings-ssl',
+			'settings/class-rest-api-toolbox-settings-help',
 			);
 
 		$files = array();
 		foreach ( $include_files as $include_file ) {
-			$files[] = REST_API_TOOLBOX_ROOT . 'includes/class-rest-api-toolbox-' . $include_file . '.php';
+			$files[] = REST_API_TOOLBOX_ROOT . 'includes/' . $include_file . '.php';
 		}
 		return $files;
 	}
@@ -42,7 +47,12 @@ class REST_API_Toolbox_Plugin {
 			'REST_API_Toolbox_Common',
 			'REST_API_Toolbox_Prefix',
 			'REST_API_Toolbox_i18n',
+			'REST_API_Toolbox_Settings_Base',
 			'REST_API_Toolbox_Settings',
+			'REST_API_Toolbox_Settings_General',
+			'REST_API_Toolbox_Settings_Core',
+			'REST_API_Toolbox_Settings_SSL',
+			'REST_API_Toolbox_Settings_Help',
 			);
 	}
 

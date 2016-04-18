@@ -19,6 +19,8 @@ Allows tweaking of several REST API settings
 * Force SSL
 * WP-CLI commands: wp rest-api-toolbox
 
+Find us on GitHub at https://github.com/petenelson/wp-rest-api-toolbox
+
 (Creative commons toolbox image provided by James Tworow https://www.flickr.com/photos/sherlock77/)
 
 == Installation ==

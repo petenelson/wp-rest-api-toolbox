@@ -10,12 +10,16 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_General' ) ) {
 
 		public function plugins_loaded() {
 			add_action( 'admin_init', array( $this, 'register_general_settings' ) );
+			add_filter( 'rest-api-toolbox-settings-tabs', array( $this, 'add_tab') );
 		}
 
+		public function add_tab( $tabs ) {
+			$tabs[ $this->settings_key ] = __( 'General', 'rest-api-toolbox' );
+			return $tabs;
+		}
 
 		public function register_general_settings() {
 			$key = $this->settings_key;
-			$this->plugin_settings_tabs[ $key ] = __( 'General', 'rest-api-toolbox' );
 
 			register_setting( $key, $key, array( $this, 'sanitize_general_settings') );
 

@@ -6,8 +6,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 	class REST_API_Toolbox_Settings extends REST_API_Toolbox_Settings_Base {
 
-		private $settings_key_core     = 'rest-api-toolbox-settings-core';
-		private $settings_key_ssl      = 'rest-api-toolbox-settings-ssl';
 		private $settings_key_help     = 'rest-api-toolbox-settings-help';
 
 
@@ -53,71 +51,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 		public function admin_init() {
 
-			foreach( $this->settings_keys() as $key => $title ) {
-				// call_user_func( array( $this, "register_{$key}_settings" ), $title );
-			}
 
 			$this->register_help_tab();
-		}
-
-
-
-
-		private function register_core_settings( $title ) {
-			$common = new REST_API_Toolbox_Common();
-			$key = $this->settings_key_core;
-			$this->plugin_settings_tabs[$key] = $title;
-
-			register_setting( $key, $key, array( $this, 'sanitize_core_settings') );
-
-			$section = 'core';
-
-			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
-
-			add_settings_field( 'remove-all-core-routes', __( 'Remove All WordPress Core Endpoints', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
-				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' ) );
-
-			$namespace = $common->core_namespace();
-			$endpoints = $common->core_endpoints();
-
-			foreach( $endpoints as $endpoint ) {
-				$name = 'remove-endpoint|/' . $namespace . '/' . $endpoint;
-				add_settings_field( $name, sprintf( __( 'Remove Endpoint: %s', 'rest-api-toolbox' ), $endpoint),
-					array( $this, 'settings_yes_no' ),
-					$key,
-					$section,
-					array( 'key' => $key, 'name' => $name, 'after' => '' )
-					);
-			}
-
-		}
-
-
-		private function register_ssl_settings( $title ) {
-			$key = $this->settings_key_ssl;
-			$this->plugin_settings_tabs[$key] = $title;
-
-			register_setting( $key, $key, array( $this, 'sanitize_ssl_settings') );
-
-			$section = 'ssl';
-
-			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
-
-			add_settings_field( 'require-ssl', __( 'Require SSL', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
-				array( 'key' => $key, 'name' => 'require-ssl', 'after' => '' ) );
-
-		}
-
-
-		public function sanitize_core_settings( $settings ) {
-
-			return $settings;
-		}
-
-
-		public function sanitize_ssl_settings( $settings ) {
-
-			return $settings;
 		}
 
 
@@ -128,9 +63,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			$section = 'help';
 			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
 		}
-
-
-
 
 		public function admin_menu() {
 			add_options_page( 'REST API Toolbox ' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
@@ -171,10 +103,13 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 		private function plugin_options_tabs() {
 			$current_tab = $this->current_tab();
-			var_dump( $this->plugin_settings_tabs );
+
 			echo '<h2>' . __( 'Settings' ) . ' &rsaquo; REST API Toolbox</h2><h2 class="nav-tab-wrapper">';
-			foreach ( $this->plugin_settings_tabs as $tab_key => $tab_caption ) {
-				$active = $current_tab == $tab_key ? 'nav-tab-active' : '';
+
+			$tabs = apply_filters( 'rest-api-toolbox-settings-tabs', array() );
+
+			foreach ( $tabs as $tab_key => $tab_caption ) {
+				$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
 				echo '<a class="nav-tab ' . $active . '" href="?page=' . urlencode( $this->settings_page ) . '&tab=' . urlencode( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
 			}
 			echo '</h2>';

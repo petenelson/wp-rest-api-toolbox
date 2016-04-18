@@ -205,15 +205,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			}
 		}
 
-		public function section_header( $args ) {
-
-			switch ( $args['id'] ) {
-				case 'help';
-					include_once REST_API_TOOLBOX_ROOT . 'admin/partials/admin-help.php';
-					break;
-			}
-
-		}
 
 	}
 

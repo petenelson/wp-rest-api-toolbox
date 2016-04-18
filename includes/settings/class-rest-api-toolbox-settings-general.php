@@ -25,7 +25,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_General' ) ) {
 
 			$section = 'general';
 
-			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
+			add_settings_section( $section, '', null, $key );
 
 			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-rest-api', 'after' => '' ) );

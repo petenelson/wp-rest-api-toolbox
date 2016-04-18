@@ -31,6 +31,7 @@ class REST_API_Toolbox_Plugin {
 			'settings/class-rest-api-toolbox-settings-general',
 			'settings/class-rest-api-toolbox-settings-core',
 			'settings/class-rest-api-toolbox-settings-ssl',
+			'settings/class-rest-api-toolbox-settings-help',
 			);
 
 		$files = array();
@@ -51,6 +52,7 @@ class REST_API_Toolbox_Plugin {
 			'REST_API_Toolbox_Settings_General',
 			'REST_API_Toolbox_Settings_Core',
 			'REST_API_Toolbox_Settings_SSL',
+			'REST_API_Toolbox_Settings_Help',
 			);
 	}
 

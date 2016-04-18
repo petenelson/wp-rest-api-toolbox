@@ -25,7 +25,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_SSL' ) ) {
 
 			$section = 'ssl';
 
-			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
+			add_settings_section( $section, '', null, $key );
 
 			add_settings_field( 'require-ssl', __( 'Require SSL', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'require-ssl', 'after' => '' ) );

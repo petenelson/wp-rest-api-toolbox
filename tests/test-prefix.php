@@ -4,7 +4,7 @@ class REST_API_Toolbox_Test_Prefix extends REST_API_Toolbox_Test_Base {
 
 	function test_changed_prefix() {
 
-		$settings = new REST_API_Toolbox_Settings();
+		$settings = new REST_API_Toolbox_Settings_General();
 		$settings->change_setting( 'general', 'rest-api-prefix', 'hello-world' );
 
 		$this->assertEquals( 'hello-world', $settings->setting_get( 'general', 'rest-api-prefix' ) );
@@ -15,7 +15,7 @@ class REST_API_Toolbox_Test_Prefix extends REST_API_Toolbox_Test_Base {
 
 	function test_unchanged_prefix() {
 
-		$settings = new REST_API_Toolbox_Settings();
+		$settings = new REST_API_Toolbox_Settings_General();
 		$settings->change_setting( 'general', 'rest-api-prefix', '' );
 
 		$this->assertEquals( '', $settings->setting_get( 'general', 'rest-api-prefix' ) );
@@ -26,7 +26,7 @@ class REST_API_Toolbox_Test_Prefix extends REST_API_Toolbox_Test_Base {
 
 	function test_sanitized_prefix() {
 
-		$settings = new REST_API_Toolbox_Settings();
+		$settings = new REST_API_Toolbox_Settings_General();
 		$settings->change_setting( 'general', 'rest-api-prefix', 'he||o /world<' ); // invalid URL, will be sanitized
 
 		$this->assertEquals( 'heo-world', $settings->setting_get( 'general', 'rest-api-prefix' ) );

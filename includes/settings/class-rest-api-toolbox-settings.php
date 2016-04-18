@@ -6,12 +6,9 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 	class REST_API_Toolbox_Settings extends REST_API_Toolbox_Settings_Base {
 
-		private $settings_key_help     = 'rest-api-toolbox-settings-help';
-
 
 		public function plugins_loaded() {
 			// admin menus
-			add_action( 'admin_init', array( $this, 'admin_init' ) );
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
 
@@ -43,26 +40,10 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			}
 		}
 
-
 		public function deactivation_hook() {
 			// placeholder in case we need deactivation code
 		}
 
-
-		public function admin_init() {
-
-
-			$this->register_help_tab();
-		}
-
-
-		private function register_help_tab() {
-			$key = $this->settings_key_help;
-			$this->plugin_settings_tabs[$key] =  __( 'Help' );
-			register_setting( $key, $key );
-			$section = 'help';
-			add_settings_section( $section, '', array( $this, 'section_header' ), $key );
-		}
 
 		public function admin_menu() {
 			add_options_page( 'REST API Toolbox ' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
@@ -116,8 +97,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-
-
-	} // end class
+	}
 
 }

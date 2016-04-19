@@ -19,6 +19,8 @@ engines:
         enabled: false
       Controversial/CamelCasePropertyName:
         enabled: false
+      Controversial/CamelCaseVariableName:
+        enabled: false
       CleanCode/ElseExpression:
         enabled: false
 ratings:

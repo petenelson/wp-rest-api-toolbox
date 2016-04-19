@@ -4,6 +4,6 @@
         "wp-coding-standards/wpcs": "2014-12-11",
         "phpunit/phpunit": "^4.8",
         "codeclimate/php-test-reporter": "^0.3.0",
-        "behat/behat": "2.5.*"
+        "behat/behat": "~2.5"
 	}
 }

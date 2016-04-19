@@ -12,9 +12,6 @@ php:
 env:
   - WP_VERSION=latest WP_MULTISITE=0
   - WP_VERSION=4.4 WP_MULTISITE=0
-    global:
-         - WP_CLI_BIN_DIR=/tmp/wp-cli-phar
-         - WP_CLI_CONFIG_PATH=/tmp/wp-cli-phar/config.yml
 
 matrix:
   include:
@@ -28,8 +25,9 @@ install:
 
 before_script:
   - bash bin/install-wp-tests.sh wordpress_test_rapt root '' localhost $WP_VERSION
+  - bash bin/install-cli-tests.sh
 
-script: phpunit
+script: ./ci/test.sh
 
 after_script:
   - bash bin/upload-coverage.sh

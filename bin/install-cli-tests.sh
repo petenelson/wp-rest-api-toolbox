@@ -43,6 +43,6 @@ install_db() {
 }
 
 install_wp_cli
-set_package_context
+# set_package_context
 download_behat
 install_db

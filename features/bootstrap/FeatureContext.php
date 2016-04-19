@@ -277,6 +277,14 @@ class FeatureContext extends BehatContext implements ClosuredContextInterface {
 		// disable emailing
 		mkdir( $dest_dir . '/wp-content/mu-plugins' );
 		copy( __DIR__ . '/../extra/no-mail.php', $dest_dir . '/wp-content/mu-plugins/no-mail.php' );
+
+		// copy this plugin to the WordPress plugins
+		mkdir( $dest_dir . '/wp-content/plugins/rest-api-toolbox' );
+		mkdir( $dest_dir . '/wp-content/plugins/rest-api-toolbox/includes' );
+
+		$this->proc( Utils\esc_cmd( "cp %s %s", dirname( dirname( __DIR__ ) ) . '/rest-api-toolbox.php', $dest_dir . '/wp-content/plugins/rest-api-toolbox/' ) )->run_check();
+		$this->proc( Utils\esc_cmd( "cp -r %s/* %s", dirname( dirname( __DIR__ ) ) . '/includes', $dest_dir . '/wp-content/plugins/rest-api-toolbox/includes/' ) )->run_check();
+
 	}
 
 	public function create_config( $subdir = '' ) {

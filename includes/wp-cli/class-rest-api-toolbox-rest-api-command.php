@@ -9,14 +9,34 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 	 *
 	 * ## OPTIONS
 	 *
+	 * <core_endpoint>
+	 * Core endpoint to disable (posts, media, users, etc)
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     wp rest-api-toolbox disable
 	 *
 	 */
 	function disable( $positional_args, $assoc_args = array() ) {
-		$this->change_enabled( true );
-		WP_CLI::Success( 'REST API disabled (other plugins can override this)' );
+		if ( ! empty( $positional_args ) ) {
+			$core_endpoint = $positional_args[0];
+			$common = new REST_API_Toolbox_Common();
+
+			if ( ! in_array( $core_endpoint, $common->core_endpoints() ) ) {
+				WP_CLI::Error( sprintf( "Invalid core endpoint: %s", $core_endpoint ) );
+				exit;
+			}
+
+			$name = 'remove-endpoint|/' . $common->core_namespace() . '/' . $core_endpoint;
+			$settings = new REST_API_Toolbox_Settings();
+			$settings->change_enabled_setting( 'core', $name, true );
+
+			WP_CLI::Success( sprintf( "Core endpoint %s disabled" , $core_endpoint ) );
+
+		} else {
+			$this->change_enabled( true );
+			WP_CLI::Success( 'REST API disabled (other plugins can override this)' );
+		}
 	}
 
 
@@ -31,8 +51,25 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 	 *
 	 */
 	function enable( $positional_args, $assoc_args = array() ) {
-		$this->change_enabled( false );
-		WP_CLI::Success( 'REST API enabled (other plugins can override this)' );
+		if ( ! empty( $positional_args ) ) {
+			$core_endpoint = $positional_args[0];
+			$common = new REST_API_Toolbox_Common();
+
+			if ( ! in_array( $core_endpoint, $common->core_endpoints() ) ) {
+				WP_CLI::Error( sprintf( "Invalid core endpoint: %s", $core_endpoint ) );
+				exit;
+			}
+
+			$name = 'remove-endpoint|/' . $common->core_namespace() . '/' . $core_endpoint;
+			$settings = new REST_API_Toolbox_Settings();
+			$settings->change_enabled_setting( 'core', $name, false );
+
+			WP_CLI::Success( sprintf( "Core endpoint %s enabled", $core_endpoint ) );
+
+		} else {
+			$this->change_enabled( false );
+			WP_CLI::Success( 'REST API enabled (other plugins can override this)' );
+		}
 	}
 
 
@@ -48,17 +85,45 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 	 */
 	function status( $positional_args, $assoc_args = array() ) {
 
-		$enabled = apply_filters( 'rest_enabled', true );
-		if ( $enabled ) {
-			WP_CLI::Line( "The REST API is enabled." );
+		if ( ! empty( $positional_args ) ) {
+			$core_endpoint = $positional_args[0];
+			$common = new REST_API_Toolbox_Common();
+
+			if ( ! in_array( $core_endpoint, $common->core_endpoints() ) ) {
+				WP_CLI::Error( sprintf( "Invalid core endpoint: %s", $core_endpoint ) );
+				exit;
+			}
+
+			$exists = $common->endpoint_exists( '/' . $common->core_namespace() . '/' . $core_endpoint );
+
+			if ( $exists ) {
+				WP_CLI::Line( sprintf( "Core endpoint %s is enabled.", $core_endpoint ) );
+			} else {
+				WP_CLI::Line( sprintf( "Core endpoint %s is disabled.", $core_endpoint ) );
+			}
+
+
 		} else {
-			WP_CLI::Line( "The REST API is disabled." );
+
+			$enabled = apply_filters( 'rest_enabled', true );
+			if ( $enabled ) {
+				WP_CLI::Line( "The REST API is enabled." );
+			} else {
+				WP_CLI::Line( "The REST API is disabled." );
+			}
+
 		}
 
 	}
 
 
 	private function change_enabled( $enabled ) {
+		$settings = new REST_API_Toolbox_Settings();
+		$settings->change_enabled_setting( 'general', 'disable-rest-api', $enabled );
+	}
+
+
+	private function change_core_enabled( $enabled ) {
 		$settings = new REST_API_Toolbox_Settings();
 		$settings->change_enabled_setting( 'general', 'disable-rest-api', $enabled );
 	}

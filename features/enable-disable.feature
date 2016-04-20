@@ -5,9 +5,10 @@ Feature: Test that enable and disable the REST API works
 
     When I run `wp plugin activate rest-api-toolbox`
     And I run `wp rest-api-toolbox disable`
+    And I run `wp rest-api-toolbox status`
     Then STDOUT should contain:
       """
-      Success: REST API disabled (other plugins can override this)
+      The REST API is disabled.
       """
 
   Scenario: Enable the REST API
@@ -15,8 +16,9 @@ Feature: Test that enable and disable the REST API works
 
     When I run `wp plugin activate rest-api-toolbox`
     And I run `wp rest-api-toolbox enable`
+    And I run `wp rest-api-toolbox status`
     Then STDOUT should contain:
       """
-      Success: REST API enabled (other plugins can override this)
+      The REST API is enabled.
       """
 

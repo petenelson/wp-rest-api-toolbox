@@ -5,18 +5,19 @@ notifications:
     on_success: never
     on_failure: change
 
-php:
-  - 5.3
-  - 5.6
-
 env:
-  - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=4.4 WP_MULTISITE=0
+  global:
+    - WP_CLI_BIN_DIR=/tmp/wp-cli-phar
+    - WP_CLI_CONFIG_PATH=/tmp/wp-cli-phar/config.yml
 
 matrix:
   include:
     - php: 5.3
-      env: WP_VERSION=latest WP_MULTISITE=1
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=4.4
+    - php: 5.6
+      env: WP_VERSION=latest
 
 install:
     - composer self-update && composer --version
@@ -24,9 +25,10 @@ install:
     - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test_rapt root '' localhost $WP_VERSION
+  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - bash bin/install-cli-tests.sh
 
-script: phpunit
+script: ./ci/test.sh
 
 after_script:
   - bash bin/upload-coverage.sh

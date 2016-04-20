@@ -115,7 +115,6 @@ install_db() {
 	# create database
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
 
-
 }
 
 install_rest_api() {

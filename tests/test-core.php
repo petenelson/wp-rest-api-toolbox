@@ -6,12 +6,13 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 		//create_initial_rest_routes();
 
+		$common = new REST_API_Toolbox_Common();
 		$settings = new REST_API_Toolbox_Settings();
 		$settings->change_enabled_setting( 'core', 'remove-all-core-routes', true );
 
 		$this->assertEquals( true, $settings->setting_is_enabled( 'core', 'remove-all-core-routes' ) );
 
-		global $wp_rest_server;
+		$wp_rest_server = $common->get_rest_api_server();
 		$routes     = $wp_rest_server->get_routes();
 		$index      = $wp_rest_server->get_index( array( 'context' => 'view' ) );
 
@@ -39,12 +40,13 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 		//create_initial_rest_routes();
 
+		$common = new REST_API_Toolbox_Common();
 		$settings = new REST_API_Toolbox_Settings();
 		$settings->change_enabled_setting( 'core', 'remove-all-core-routes', false );
 
 		$this->assertEquals( false, $settings->setting_is_enabled( 'core', 'remove-all-core-routes' ) );
 
-		global $wp_rest_server;
+		$wp_rest_server = $common->get_rest_api_server();
 		$routes     = $wp_rest_server->get_routes();
 		$index      = $wp_rest_server->get_index( array( 'context' => 'view' ) );
 

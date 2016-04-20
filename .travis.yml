@@ -12,6 +12,9 @@ php:
 env:
   - WP_VERSION=latest WP_MULTISITE=0
   - WP_VERSION=4.4 WP_MULTISITE=0
+  global:
+    - WP_CLI_BIN_DIR=/tmp/wp-cli-phar
+    - WP_CLI_CONFIG_PATH=/tmp/wp-cli-phar/config.yml
 
 matrix:
   include:

@@ -2,7 +2,7 @@
 /**
  * Manage general REST API settings
  */
-class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
+class REST_API_Toolbox_REST_API_Command extends REST_API_Toolbox_Base_Command  {
 
 	/**
 	 * Disables the REST API
@@ -28,13 +28,12 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 			}
 
 			$name = 'remove-endpoint|/' . $common->core_namespace() . '/' . $core_endpoint;
-			$settings = new REST_API_Toolbox_Settings();
-			$settings->change_enabled_setting( 'core', $name, true );
+			$this->change_enabled_setting( 'core', $name, true );
 
 			WP_CLI::Success( sprintf( "Core endpoint %s disabled" , $core_endpoint ) );
 
 		} else {
-			$this->change_enabled( true );
+			$this->change_rest_api_enabled( true );
 			WP_CLI::Success( 'REST API disabled (other plugins can override this)' );
 		}
 	}
@@ -61,13 +60,12 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 			}
 
 			$name = 'remove-endpoint|/' . $common->core_namespace() . '/' . $core_endpoint;
-			$settings = new REST_API_Toolbox_Settings();
-			$settings->change_enabled_setting( 'core', $name, false );
+			$this->change_enabled_setting( 'core', $name, false );
 
 			WP_CLI::Success( sprintf( "Core endpoint %s enabled", $core_endpoint ) );
 
 		} else {
-			$this->change_enabled( false );
+			$this->change_rest_api_enabled( false );
 			WP_CLI::Success( 'REST API enabled (other plugins can override this)' );
 		}
 	}
@@ -116,16 +114,8 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 
 	}
 
-
-	private function change_enabled( $enabled ) {
-		$settings = new REST_API_Toolbox_Settings();
-		$settings->change_enabled_setting( 'general', 'disable-rest-api', $enabled );
-	}
-
-
-	private function change_core_enabled( $enabled ) {
-		$settings = new REST_API_Toolbox_Settings();
-		$settings->change_enabled_setting( 'general', 'disable-rest-api', $enabled );
+	private function change_rest_api_enabled( $enabled ) {
+		$this->change_enabled_setting( 'general', 'disable-rest-api', $enabled );
 	}
 
 }

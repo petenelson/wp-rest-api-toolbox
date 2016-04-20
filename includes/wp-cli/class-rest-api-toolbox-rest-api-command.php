@@ -19,6 +19,7 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 		WP_CLI::Success( 'REST API disabled (other plugins can override this)' );
 	}
 
+
 	/**
 	 * Enables the REST API
 	 *
@@ -33,6 +34,29 @@ class REST_API_Toolbox_REST_API_Command extends WP_CLI_Command  {
 		$this->change_enabled( false );
 		WP_CLI::Success( 'REST API enabled (other plugins can override this)' );
 	}
+
+
+	/**
+	 * Gets the enabled/disabled status the REST API
+	 *
+	 * ## OPTIONS
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp rest-api-toolbox status
+	 *
+	 */
+	function status( $positional_args, $assoc_args = array() ) {
+
+		$enabled = apply_filters( 'rest_enabled', true );
+		if ( $enabled ) {
+			WP_CLI::Line( "The REST API is enabled." );
+		} else {
+			WP_CLI::Line( "The REST API is disabled." );
+		}
+
+	}
+
 
 	private function change_enabled( $enabled ) {
 		$settings = new REST_API_Toolbox_Settings();

@@ -40,6 +40,9 @@ Have any questions?  We can answer them here?
 
 == Changelog ==
 
+= 1.2.0 April ??, 2016 =
+* Added CLI command: wp rest-api-toolbox status
+
 = 1.1.0 April 16, 2016 =
 * Change REST API prefix
 * Remove specific core endpoints

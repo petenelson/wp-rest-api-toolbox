@@ -22,6 +22,40 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
+		public function endpoint_exists( $endpoint ) {
+
+			rest_api_loaded();
+
+			$wp_rest_server = $this->get_rest_api_server();
+			$routes = $wp_rest_server->get_routes();
+
+			$endpoint_exists = false;
+			foreach ( array_keys( $routes ) as $route_endpoint ) {
+				if ( 0 === stripos( $route_endpoint, $endpoint ) ) {
+					$endpoint_exists = true;
+					break;
+				}
+			}
+
+			return $endpoint_exists;
+
+		}
+
+		public function get_rest_api_server() {
+
+			global $wp_rest_server;
+
+			if ( is_null( $wp_rest_server ) ) {
+				$wp_rest_server_class = apply_filters( 'wp_rest_server_class', 'WP_REST_Server' );
+				$wp_rest_server = new $wp_rest_server_class;
+				do_action( 'rest_api_init', $wp_rest_server );
+			}
+
+			return $wp_rest_server;
+
+		}
+
+
 		public function core_namespace() {
 			return apply_filters( 'rest-api-toolbox-core-namespace', 'wp/v2' );
 		}

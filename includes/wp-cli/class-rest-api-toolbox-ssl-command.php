@@ -2,7 +2,7 @@
 /**
  * Manage REST API SSL settings
  */
-class REST_API_Toolbox_SSL_Command extends WP_CLI_Command  {
+class REST_API_Toolbox_SSL_Command extends REST_API_Toolbox_Base_Command  {
 
 	/**
 	 * Make SSL required for REST API endpoints
@@ -15,7 +15,7 @@ class REST_API_Toolbox_SSL_Command extends WP_CLI_Command  {
 	 *
 	 */
 	function required( $positional_args, $assoc_args = array() ) {
-		$this->change_enabled( 'require-ssl', true );
+		$this->change_enabled_setting( 'ssl', 'require-ssl', true );
 		WP_CLI::Success( 'SSL is now required for REST API endpoints' );
 	}
 
@@ -30,14 +30,34 @@ class REST_API_Toolbox_SSL_Command extends WP_CLI_Command  {
 	 *
 	 */
 	function optional( $positional_args, $assoc_args = array() ) {
-		$this->change_enabled( 'require-ssl', false );
+		$this->change_enabled_setting( 'ssl', 'require-ssl', false );
 		WP_CLI::Success( 'SSL is now optional for REST API endpoints' );
 	}
 
-	private function change_enabled( $setting, $enabled ) {
+
+	/**
+	 * Gets the SSL status the REST API
+	 *
+	 * ## OPTIONS
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp rest-api-toolbox ssl status
+	 *
+	 */
+	function status( $positional_args, $assoc_args = array() ) {
+
 		$settings = new REST_API_Toolbox_Settings();
-		$settings->change_enabled_setting( 'ssl', $setting, $enabled );
+		$require_ssl = $settings->setting_is_enabled( 'ssl', 'require-ssl' );
+
+		if ( $require_ssl ) {
+			WP_CLI::Line( "SSL is required for REST API endpoints." );
+		} else {
+			WP_CLI::Line( "SSL is optional for REST API endpoints." );
+		}
+
 	}
+
 
 }
 

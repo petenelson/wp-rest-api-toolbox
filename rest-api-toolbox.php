@@ -14,13 +14,13 @@
 class REST_API_Toolbox_Plugin {
 
 
-	function define_constants() {
+	static function define_constants() {
 		if ( ! defined( 'REST_API_TOOLBOX_ROOT' ) ) {
 			define( 'REST_API_TOOLBOX_ROOT', trailingslashit( dirname( __FILE__ ) ) );
 		}
 	}
 
-	function get_required_files() {
+	static function get_required_files() {
 		$include_files = array(
 			'class-rest-api-toolbox-base',
 			'class-rest-api-toolbox-common',
@@ -41,7 +41,7 @@ class REST_API_Toolbox_Plugin {
 		return $files;
 	}
 
-	function get_class_names() {
+	static function get_class_names() {
 		return array(
 			'REST_API_Toolbox_Base',
 			'REST_API_Toolbox_Common',
@@ -56,7 +56,7 @@ class REST_API_Toolbox_Plugin {
 			);
 	}
 
-	function require_files( $files ) {
+	static function require_files( $files ) {
 		foreach( $files as $file ) {
 			require_once $file;
 		}
@@ -64,12 +64,12 @@ class REST_API_Toolbox_Plugin {
 
 }
 
-$plugin = new REST_API_Toolbox_Plugin();
-$plugin->define_constants();
-$plugin->require_files( $plugin->get_required_files() );
+
+REST_API_Toolbox_Plugin::define_constants();
+REST_API_Toolbox_Plugin::require_files( REST_API_Toolbox_Plugin::get_required_files() );
 
 // load plugin classes
-foreach( $plugin->get_class_names() as $class_name ) {
+foreach( REST_API_Toolbox_Plugin::get_class_names() as $class_name ) {
 	$classes = array();
 	if ( class_exists( $class_name ) ) {
 		$classes[] = new $class_name;

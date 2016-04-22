@@ -6,7 +6,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 	class REST_API_Toolbox_Common {
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 			
 			add_filter( 'rest_enabled',         array( $this, 'rest_api_disabled_filter' ), 100 );
 			add_filter( 'rest_jsonp_enabled',   array( $this, 'rest_jsonp_disabled_filter' ), 100 );
@@ -22,7 +22,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function endpoint_exists( $endpoint ) {
+		static public function endpoint_exists( $endpoint ) {
 
 			rest_api_loaded();
 
@@ -41,7 +41,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		}
 
-		public function get_rest_api_server() {
+		static public function get_rest_api_server() {
 
 			global $wp_rest_server;
 
@@ -56,12 +56,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function core_namespace() {
+		static public function core_namespace() {
 			return apply_filters( 'rest-api-toolbox-core-namespace', 'wp/v2' );
 		}
 
 
-		public function core_endpoints() {
+		static public function core_endpoints() {
 			$endpoints = array(
 				'posts',
 				'pages',
@@ -77,7 +77,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			return apply_filters( 'rest-api-toolbox-core-endpoints', $endpoints );
 		}
 
-		public function rest_api_disabled_filter( $enabled ) {
+		static public function rest_api_disabled_filter( $enabled ) {
 			if ( $enabled ) {
 				$settings = new REST_API_Toolbox_Settings();
 				$disable_rest_api = $settings->setting_is_enabled( 'general', 'disable-rest-api' );
@@ -91,7 +91,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function rest_jsonp_disabled_filter( $enabled ) {
+		static public function rest_jsonp_disabled_filter( $enabled ) {
 			if ( $enabled ) {
 				$settings = new REST_API_Toolbox_Settings();
 				$disable_jsonp = $settings->setting_is_enabled( 'general', 'disable-jsonp' );
@@ -105,7 +105,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function disallow_non_ssl( $response, $server, $request ) {
+		static public function disallow_non_ssl( $response, $server, $request ) {
 			if ( ! is_ssl() ) {
 
 				$settings = new REST_API_Toolbox_Settings();
@@ -120,7 +120,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_wordpress_core_namespace( $response ) {
+		static public function remove_wordpress_core_namespace( $response ) {
 
 			$settings = new REST_API_Toolbox_Settings();
 			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
@@ -139,7 +139,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_all_core_endpoints( $routes ) {
+		static public function remove_all_core_endpoints( $routes ) {
 
 			$settings = new REST_API_Toolbox_Settings();
 			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
@@ -152,7 +152,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_selected_core_endpoints( $routes ) {
+		static public function remove_selected_core_endpoints( $routes ) {
 
 			$settings = new REST_API_Toolbox_Settings();
 			$core_settings = get_option( $settings->options_key( 'core' ) );
@@ -183,7 +183,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_endpoint( $routes, $remove_endpoint ) {
+		static public function remove_endpoint( $routes, $remove_endpoint ) {
 			foreach ( array_keys( $routes ) as $endpoint ) {
 				if ( 0 === strpos( $endpoint, $remove_endpoint ) ) {
 					unset( $routes[ $endpoint ] );

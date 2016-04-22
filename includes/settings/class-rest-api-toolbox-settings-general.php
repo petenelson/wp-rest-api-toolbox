@@ -8,17 +8,17 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_General' ) ) {
 
 		private $settings_key  = 'rest-api-toolbox-settings-general';
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 			add_action( 'admin_init', array( $this, 'register_general_settings' ) );
 			add_filter( 'rest-api-toolbox-settings-tabs', array( $this, 'add_tab') );
 		}
 
-		public function add_tab( $tabs ) {
+		static public function add_tab( $tabs ) {
 			$tabs[ $this->settings_key ] = __( 'General', 'rest-api-toolbox' );
 			return $tabs;
 		}
 
-		public function register_general_settings() {
+		static public function register_general_settings() {
 			$key = $this->settings_key;
 
 			register_setting( $key, $key, array( $this, 'sanitize_general_settings') );
@@ -44,7 +44,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_General' ) ) {
 
 		}
 
-		public function sanitize_general_settings( $settings ) {
+		static public function sanitize_general_settings( $settings ) {
 
 			if ( ! empty( $settings['rest-api-prefix'] ) ) {
 				$settings['rest-api-prefix'] = sanitize_title( trim( $settings['rest-api-prefix'] ) );

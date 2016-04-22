@@ -5,10 +5,9 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 	class REST_API_Toolbox_Settings_Base {
 
-		var $settings_page = 'rest-api-toolbox-settings';
-		static $plugin_settings_tabs  = array();
+		static $settings_page = 'rest-api-toolbox-settings';
 
-		public function change_enabled_setting( $key, $setting, $enabled ) {
+		static public function change_enabled_setting( $key, $setting, $enabled ) {
 			if ( ! $this->settings_key_is_valid( $key ) ) {
 				return false;
 			}
@@ -24,7 +23,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			return update_option( $options_key, $option );
 		}
 
-		public function change_setting( $key, $setting, $value ) {
+		static public function change_setting( $key, $setting, $value ) {
 			if ( ! $this->settings_key_is_valid( $key ) ) {
 				return false;
 			}
@@ -43,12 +42,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function settings_key_is_valid( $key ) {
+		static public function settings_key_is_valid( $key ) {
 			return in_array( $key, array_keys( $this->settings_keys() ) );
 		}
 
 
-		public function settings_keys() {
+		static public function settings_keys() {
 			return array(
 				'general'  => __( 'General', 'rest-api-toolbox' ),
 				'core'     => __( 'Core', 'rest-api-toolbox' ),
@@ -57,12 +56,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function setting_is_enabled( $key, $setting ) {
+		static public function setting_is_enabled( $key, $setting ) {
 			return '1' === $this->setting_get( $key, $setting, '0' );
 		}
 
 
-		public function setting_get( $key, $setting, $value = '' ) {
+		static public function setting_get( $key, $setting, $value = '' ) {
 
 			$args = wp_parse_args( get_option( $this->options_key( $key ) ),
 				array(
@@ -74,11 +73,11 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function options_key( $key ) {
+		static public function options_key( $key ) {
 			return "{$this->settings_page}-{$key}";
 		}
 
-		public function settings_input( $args ) {
+		static public function settings_input( $args ) {
 
 			extract( wp_parse_args( $args,
 				array(
@@ -113,7 +112,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function settings_checkbox_list( $args ) {
+		static public function settings_checkbox_list( $args ) {
 			extract( wp_parse_args( $args,
 				array(
 					'name' => '',
@@ -149,7 +148,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function settings_textarea( $args ) {
+		static public function settings_textarea( $args ) {
 
 			extract( wp_parse_args( $args,
 				array(
@@ -172,7 +171,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function settings_yes_no( $args ) {
+		static public function settings_yes_no( $args ) {
 
 			extract( wp_parse_args( $args,
 				array(
@@ -199,7 +198,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
-		public function output_after( $after ) {
+		static public function output_after( $after ) {
 			if ( ! empty( $after ) ) {
 				echo '<div>' . wp_kses_post( $after ) . '</div>';
 			}

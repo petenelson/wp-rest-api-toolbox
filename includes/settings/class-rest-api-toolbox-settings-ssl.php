@@ -6,19 +6,19 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_SSL' ) ) {
 
 	class REST_API_Toolbox_Settings_SSL extends REST_API_Toolbox_Settings_Base {
 
-		private $settings_key  = 'rest-api-toolbox-settings-ssl';
+		static $settings_key  = 'rest-api-toolbox-settings-ssl';
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 			add_action( 'admin_init', array( $this, 'register_ssl_settings' ) );
 			add_filter( 'rest-api-toolbox-settings-tabs', array( $this, 'add_tab') );
 		}
 
-		public function add_tab( $tabs ) {
+		static public function add_tab( $tabs ) {
 			$tabs[ $this->settings_key ] = __( 'SSL', 'rest-api-toolbox' );
 			return $tabs;
 		}
 
-		public function register_ssl_settings( $title ) {
+		static public function register_ssl_settings( $title ) {
 			$key = $this->settings_key;
 
 			register_setting( $key, $key, array( $this, 'sanitize_ssl_settings') );
@@ -33,7 +33,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_SSL' ) ) {
 		}
 
 
-		public function sanitize_ssl_settings( $settings ) {
+		static public function sanitize_ssl_settings( $settings ) {
 
 			return $settings;
 		}

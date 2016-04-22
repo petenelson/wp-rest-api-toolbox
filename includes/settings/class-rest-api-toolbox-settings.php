@@ -7,7 +7,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 	class REST_API_Toolbox_Settings extends REST_API_Toolbox_Settings_Base {
 
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 			// admin menus
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			add_action( 'admin_notices', array( $this, 'activation_admin_notice' ) );
@@ -19,7 +19,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		public function activation_hook() {
+		static public function activation_hook() {
 
 			// add an option so we can show the activated admin notice
 			add_option( 'rest-api-toolbox-plugin-activated', '1' );
@@ -27,7 +27,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		public function activation_admin_notice() {
+		static public function activation_admin_notice() {
 			if ( '1' === get_option( 'rest-api-toolbox-plugin-activated' ) ) {
 				?>
 					<div class="updated">
@@ -40,17 +40,17 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			}
 		}
 
-		public function deactivation_hook() {
+		static public function deactivation_hook() {
 			// placeholder in case we need deactivation code
 		}
 
 
-		public function admin_menu() {
+		static public function admin_menu() {
 			add_options_page( 'REST API Toolbox ' . __( 'Settings' ), __( 'REST API Toolbox', 'rest-api-toolbox' ), 'manage_options', $this->settings_page, array( $this, 'options_page' ), 30 );
 		}
 
 
-		public function options_page() {
+		static public function options_page() {
 
 			$tab = $this->current_tab(); ?>
 			<div class="wrap">

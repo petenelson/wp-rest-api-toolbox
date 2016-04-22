@@ -8,11 +8,11 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		static $settings_page = 'rest-api-toolbox-settings';
 
 		static public function change_enabled_setting( $key, $setting, $enabled ) {
-			if ( ! $this->settings_key_is_valid( $key ) ) {
+			if ( ! self::settings_key_is_valid( $key ) ) {
 				return false;
 			}
 
-			$options_key = $this->options_key( $key );
+			$options_key = self::options_key( $key );
 			$option = get_option( $options_key );
 			if ( false === $option ) {
 				$option = array();
@@ -24,11 +24,11 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 		static public function change_setting( $key, $setting, $value ) {
-			if ( ! $this->settings_key_is_valid( $key ) ) {
+			if ( ! self::settings_key_is_valid( $key ) ) {
 				return false;
 			}
 
-			$options_key = $this->options_key( $key );
+			$options_key = self::options_key( $key );
 			$option = get_option( $options_key );
 			if ( false === $option ) {
 				$option = array();
@@ -36,14 +36,14 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 			$option[ $setting ] = $value;
 
-			$option = call_user_func( array( $this, "sanitize_{$key}_settings" ), $option );
+			$option = call_user_func( array( __CLASS__, "sanitize_{$key}_settings" ), $option );
 
 			return update_option( $options_key, $option );
 		}
 
 
 		static public function settings_key_is_valid( $key ) {
-			return in_array( $key, array_keys( $this->settings_keys() ) );
+			return in_array( $key, array_keys( self::settings_keys() ) );
 		}
 
 
@@ -57,13 +57,14 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 
 		static public function setting_is_enabled( $key, $setting ) {
-			return '1' === $this->setting_get( $key, $setting, '0' );
+			return '1' === self::setting_get( $key, $setting, '0' );
 		}
 
 
 		static public function setting_get( $key, $setting, $value = '' ) {
 
-			$args = wp_parse_args( get_option( $this->options_key( $key ) ),
+
+			$args = wp_parse_args( get_option( self::options_key( $key ) ),
 				array(
 					$setting => $value,
 				)
@@ -74,12 +75,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 
 		static public function options_key( $key ) {
-			return "{$this->settings_page}-{$key}";
+			return self::$settings_page . "-{$key}";
 		}
 
 		static public function settings_input( $args ) {
 
-			extract( wp_parse_args( $args,
+			$args = wp_parse_args( $args,
 				array(
 					'name' => '',
 					'key' => '',
@@ -91,11 +92,20 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 					'max' => 0,
 					'step' => 1,
 				)
-			) );
+			);
 
+			$name      = $args['name'];
+			$key       = $args['key'];
+			$maxlength = $args['maxlength'];
+			$size      = $args['size'];
+			$after     = $args['after'];
+			$type      = $args['type'];
+			$min       = $args['min'];
+			$max       = $args['max'];
+			$step      = $args['step'];
 
 			$option = get_option( $key );
-			$value = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
+			$value = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
 
 			$min_max_step = '';
 			if ( $type === 'number' ) {
@@ -107,7 +117,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 			echo "<div><input id='{$name}' name='{$key}[{$name}]'  type='{$type}' value='" . $value . "' size='{$size}' maxlength='{$maxlength}' {$min_max_step} /></div>";
 
-			$this->output_after( $after );
+			self::output_after( $after );
 
 		}
 
@@ -166,7 +176,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 			echo "<div><textarea id='{$name}' name='{$key}[{$name}]' rows='{$rows}' cols='{$cols}'>" . $value . "</textarea></div>";
 
-			$this->output_after( $after );
+			self::output_after( $after );
 
 		}
 
@@ -193,7 +203,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'No' ) . "</label> ";
 			echo '</div>';
 
-			$this->output_after( $after );
+			self::output_after( $after );
 
 		}
 

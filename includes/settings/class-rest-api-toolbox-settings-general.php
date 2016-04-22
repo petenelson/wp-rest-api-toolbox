@@ -6,34 +6,34 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_General' ) ) {
 
 	class REST_API_Toolbox_Settings_General extends REST_API_Toolbox_Settings_Base {
 
-		private $settings_key  = 'rest-api-toolbox-settings-general';
+		static $settings_key  = 'rest-api-toolbox-settings-general';
 
 		static public function plugins_loaded() {
-			add_action( 'admin_init', array( $this, 'register_general_settings' ) );
-			add_filter( 'rest-api-toolbox-settings-tabs', array( $this, 'add_tab') );
+			add_action( 'admin_init', array( __CLASS__, 'register_general_settings' ) );
+			add_filter( 'rest-api-toolbox-settings-tabs', array( __CLASS__, 'add_tab') );
 		}
 
 		static public function add_tab( $tabs ) {
-			$tabs[ $this->settings_key ] = __( 'General', 'rest-api-toolbox' );
+			$tabs[ self::$settings_key ] = __( 'General', 'rest-api-toolbox' );
 			return $tabs;
 		}
 
 		static public function register_general_settings() {
-			$key = $this->settings_key;
+			$key = self::$settings_key;
 
-			register_setting( $key, $key, array( $this, 'sanitize_general_settings') );
+			register_setting( $key, $key, array( __CLASS__, 'sanitize_general_settings') );
 
 			$section = 'general';
 
 			add_settings_section( $section, '', null, $key );
 
-			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( __CLASS__, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-rest-api', 'after' => '' ) );
 
-			add_settings_field( 'disable-jsonp', __( 'Disable JSONP Support', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'disable-jsonp', __( 'Disable JSONP Support', 'rest-api-toolbox' ), array( __CLASS__, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-jsonp', 'after' => '' ) );
 
-			add_settings_field( 'rest-api-prefix', __( 'REST API Prefix', 'rest-api-toolbox' ), array( $this, 'settings_input' ), $key, $section,
+			add_settings_field( 'rest-api-prefix', __( 'REST API Prefix', 'rest-api-toolbox' ), array( __CLASS__, 'settings_input' ), $key, $section,
 				array(
 					'key' => $key,
 					'name' =>

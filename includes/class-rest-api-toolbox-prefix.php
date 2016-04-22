@@ -8,7 +8,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Prefix' ) ) {
 
 		static public function plugins_loaded() {
 
-			add_filter( 'rest_url_prefix', array( $this, 'change_url_prefix' ), 100 );
+			add_filter( 'rest_url_prefix', array( __CLASS__, 'change_url_prefix' ), 100 );
 
 		}
 

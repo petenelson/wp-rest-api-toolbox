@@ -311,6 +311,9 @@ class FeatureContext extends BehatContext implements ClosuredContextInterface {
 		);
 
 		$this->proc( 'wp core install', $install_args, $subdir )->run_check();
+
+		$this->proc( 'wp plugin install rest-api --activate', array(), $subdir )->run_check();
+
 	}
 }
 

@@ -6,13 +6,11 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 		//create_initial_rest_routes();
 
-		$common = new REST_API_Toolbox_Common();
-		$settings = new REST_API_Toolbox_Settings();
-		$settings->change_enabled_setting( 'core', 'remove-all-core-routes', true );
+		REST_API_Toolbox_Settings::change_enabled_setting( 'core', 'remove-all-core-routes', true );
 
-		$this->assertEquals( true, $settings->setting_is_enabled( 'core', 'remove-all-core-routes' ) );
+		$this->assertEquals( true, REST_API_Toolbox_Settings::setting_is_enabled( 'core', 'remove-all-core-routes' ) );
 
-		$wp_rest_server = $common->get_rest_api_server();
+		$wp_rest_server = REST_API_Toolbox_Common::get_rest_api_server();
 		$routes     = $wp_rest_server->get_routes();
 		$index      = $wp_rest_server->get_index( array( 'context' => 'view' ) );
 
@@ -38,15 +36,11 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 	function test_do_not_remove_core() {
 
-		//create_initial_rest_routes();
+		REST_API_Toolbox_Settings::change_enabled_setting( 'core', 'remove-all-core-routes', false );
 
-		$common = new REST_API_Toolbox_Common();
-		$settings = new REST_API_Toolbox_Settings();
-		$settings->change_enabled_setting( 'core', 'remove-all-core-routes', false );
+		$this->assertEquals( false, REST_API_Toolbox_Settings::setting_is_enabled( 'core', 'remove-all-core-routes' ) );
 
-		$this->assertEquals( false, $settings->setting_is_enabled( 'core', 'remove-all-core-routes' ) );
-
-		$wp_rest_server = $common->get_rest_api_server();
+		$wp_rest_server = REST_API_Toolbox_Common::get_rest_api_server();
 		$routes     = $wp_rest_server->get_routes();
 		$index      = $wp_rest_server->get_index( array( 'context' => 'view' ) );
 
@@ -73,18 +67,16 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 	function test_remove_core_endpoints() {
 
-		$settings    = new REST_API_Toolbox_Settings();
-		$common      = new REST_API_Toolbox_Common();
-		$namespace   = $common->core_namespace();
+		$namespace   = REST_API_Toolbox_Common::core_namespace();
 
-		foreach( $common->core_endpoints() as $endpoint ) {
+		foreach( REST_API_Toolbox_Common::core_endpoints() as $endpoint ) {
 
 			$endpoint = '/' . $namespace . '/' . $endpoint;
 			$remove_endpoint = 'remove-endpoint|' . $endpoint;
 
-			$settings->change_enabled_setting( 'core', $remove_endpoint, true );
+			REST_API_Toolbox_Settings::change_enabled_setting( 'core', $remove_endpoint, true );
 
-			$this->assertEquals( true, $settings->setting_is_enabled( 'core', $remove_endpoint ) );
+			$this->assertEquals( true, REST_API_Toolbox_Settings::setting_is_enabled( 'core', $remove_endpoint ) );
 			$this->assertFalse( $this->endpoint_exists( $endpoint ), $endpoint );
 
 		}
@@ -93,18 +85,16 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 	function test_do_not_remove_core_endpoints() {
 
-		$settings    = new REST_API_Toolbox_Settings();
-		$common      = new REST_API_Toolbox_Common();
-		$namespace   = $common->core_namespace();
+		$namespace   = REST_API_Toolbox_Common::core_namespace();
 
-		foreach( $common->core_endpoints() as $endpoint ) {
+		foreach( REST_API_Toolbox_Common::core_endpoints() as $endpoint ) {
 
 			$endpoint = '/' . $namespace . '/' . $endpoint;
 			$remove_endpoint = 'remove-endpoint|' . $endpoint;
 
-			$settings->change_enabled_setting( 'core', $remove_endpoint, false );
+			REST_API_Toolbox_Settings::change_enabled_setting( 'core', $remove_endpoint, false );
 
-			$this->assertEquals( false, $settings->setting_is_enabled( 'core', $remove_endpoint ) );
+			$this->assertEquals( false, REST_API_Toolbox_Settings::setting_is_enabled( 'core', $remove_endpoint ) );
 			$this->assertTrue( $this->endpoint_exists( $endpoint ), $endpoint );
 
 		}

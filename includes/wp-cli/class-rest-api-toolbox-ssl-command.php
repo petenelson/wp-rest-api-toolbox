@@ -47,8 +47,7 @@ class REST_API_Toolbox_SSL_Command extends REST_API_Toolbox_Base_Command  {
 	 */
 	function status( $positional_args, $assoc_args = array() ) {
 
-		$settings = new REST_API_Toolbox_Settings();
-		$require_ssl = $settings->setting_is_enabled( 'ssl', 'require-ssl' );
+		$require_ssl = REST_API_Toolbox_Settings::setting_is_enabled( 'ssl', 'require-ssl' );
 
 		if ( $require_ssl ) {
 			WP_CLI::Line( "SSL is required for REST API endpoints." );

@@ -20,14 +20,13 @@ class REST_API_Toolbox_REST_API_Command extends REST_API_Toolbox_Base_Command  {
 	function disable( $positional_args, $assoc_args = array() ) {
 		if ( ! empty( $positional_args ) ) {
 			$core_endpoint = $positional_args[0];
-			$common = new REST_API_Toolbox_Common();
 
-			if ( ! in_array( $core_endpoint, $common->core_endpoints() ) ) {
+			if ( ! in_array( $core_endpoint, REST_API_Toolbox_Common::core_endpoints() ) ) {
 				WP_CLI::Error( sprintf( "Invalid core endpoint: %s", $core_endpoint ) );
 				exit;
 			}
 
-			$name = 'remove-endpoint|/' . $common->core_namespace() . '/' . $core_endpoint;
+			$name = 'remove-endpoint|/' . REST_API_Toolbox_Common::core_namespace() . '/' . $core_endpoint;
 			$this->change_enabled_setting( 'core', $name, true );
 
 			WP_CLI::Success( sprintf( "Core endpoint %s disabled" , $core_endpoint ) );
@@ -52,14 +51,13 @@ class REST_API_Toolbox_REST_API_Command extends REST_API_Toolbox_Base_Command  {
 	function enable( $positional_args, $assoc_args = array() ) {
 		if ( ! empty( $positional_args ) ) {
 			$core_endpoint = $positional_args[0];
-			$common = new REST_API_Toolbox_Common();
 
-			if ( ! in_array( $core_endpoint, $common->core_endpoints() ) ) {
+			if ( ! in_array( $core_endpoint, REST_API_Toolbox_Common::core_endpoints() ) ) {
 				WP_CLI::Error( sprintf( "Invalid core endpoint: %s", $core_endpoint ) );
 				exit;
 			}
 
-			$name = 'remove-endpoint|/' . $common->core_namespace() . '/' . $core_endpoint;
+			$name = 'remove-endpoint|/' . REST_API_Toolbox_Common::core_namespace() . '/' . $core_endpoint;
 			$this->change_enabled_setting( 'core', $name, false );
 
 			WP_CLI::Success( sprintf( "Core endpoint %s enabled", $core_endpoint ) );
@@ -85,14 +83,13 @@ class REST_API_Toolbox_REST_API_Command extends REST_API_Toolbox_Base_Command  {
 
 		if ( ! empty( $positional_args ) ) {
 			$core_endpoint = $positional_args[0];
-			$common = new REST_API_Toolbox_Common();
 
-			if ( ! in_array( $core_endpoint, $common->core_endpoints() ) ) {
+			if ( ! in_array( $core_endpoint, REST_API_Toolbox_Common::core_endpoints() ) ) {
 				WP_CLI::Error( sprintf( "Invalid core endpoint: %s", $core_endpoint ) );
 				exit;
 			}
 
-			$exists = $common->endpoint_exists( '/' . $common->core_namespace() . '/' . $core_endpoint );
+			$exists = REST_API_Toolbox_Common::endpoint_exists( '/' . REST_API_Toolbox_Common::core_namespace() . '/' . $core_endpoint );
 
 			if ( $exists ) {
 				WP_CLI::Line( sprintf( "Core endpoint %s is enabled.", $core_endpoint ) );

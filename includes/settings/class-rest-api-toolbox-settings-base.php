@@ -23,7 +23,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			return update_option( $options_key, $option );
 		}
 
-		static public function change_setting( $key, $setting, $value ) {
+		static public function change_setting( $key, $setting, $value, $sanitize_callback = null ) {
 			if ( ! self::settings_key_is_valid( $key ) ) {
 				return false;
 			}
@@ -36,7 +36,11 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 			$option[ $setting ] = $value;
 
-			$option = call_user_func( array( __CLASS__, "sanitize_{$key}_settings" ), $option );
+			if ( empty( $sanitize_callback ) ) {
+				$sanitize_callback = array( __CLASS__, "sanitize_{$key}_settings" );
+			}
+
+			$option = call_user_func( $sanitize_callback, $option );
 
 			return update_option( $options_key, $option );
 		}

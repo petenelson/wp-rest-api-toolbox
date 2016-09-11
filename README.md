@@ -3,7 +3,7 @@
 **Tags:** rest api, rest, wp rest api  
 **Donate link:** https://petenelson.io/  
 **Requires at least:** 4.4  
-**Tested up to:** 4.5  
+**Tested up to:** 4.6  
 **Stable tag:** 1.1.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -22,6 +22,8 @@ Allows tweaking of several REST API settings
 * Remove WordPress core endpoints
 * Force SSL
 * WP-CLI commands: wp rest-api-toolbox
+
+Find us on GitHub at https://github.com/petenelson/wp-rest-api-toolbox
 
 (Creative commons toolbox image provided by James Tworow https://www.flickr.com/photos/sherlock77/)
 
@@ -57,6 +59,7 @@ Have any questions?  We can answer them here?
 ## Upgrade Notice ##
 
 ### 1.1.0 April 16, 2016 ###
+* Change REST API prefix
 * Remove specific core endpoints
 * Disable JSONP
 

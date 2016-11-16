@@ -6,7 +6,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 	class REST_API_Toolbox_Settings extends REST_API_Toolbox_Settings_Base {
 
-
 		public function plugins_loaded() {
 			// admin menus
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -15,7 +14,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			// filters to get plugin settings
 			add_filter( 'rest-api-toolbox-setting-is-enabled', array( $this, 'setting_is_enabled' ), 10, 2 );
 			add_filter( 'rest-api-toolbox-setting-get', array( $this, 'setting_get' ), 10, 3 );
-
 		}
 
 
@@ -59,7 +57,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 					<?php settings_fields( $tab ); ?>
 					<?php do_settings_sections( $tab ); ?>
 					<?php
-						if ( $this->settings_key_help !== $tab ) {
+						if ( REST_API_Toolbox_Settings_Help::get_settings_key() !== $tab ) {
 							submit_button( __( 'Save Changes' ), 'primary', 'submit', true );
 						}
 					?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: REST API Toolbox
- * Version: 1.1.0
+ * Version: 1.2.0
  * Description: Allows easy tweaks of several REST API settings
  * Author: Pete Nelson
  * Author URI: https://github.com/petenelson/wp-rest-api-toolbox

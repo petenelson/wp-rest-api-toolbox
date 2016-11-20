@@ -8,7 +8,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		public function plugins_loaded() {
 			
-			add_filter( 'rest_enabled',         array( $this, 'rest_api_disabled_filter' ), 100 );
+			add_filter( 'rest_authentication_errors', array( $this, 'rest_api_disabled_filter' ), 100 );
 			add_filter( 'rest_jsonp_enabled',   array( $this, 'rest_jsonp_disabled_filter' ), 100 );
 
 			add_filter( 'rest_pre_dispatch',    array( $this, 'disallow_non_ssl' ), 100, 3 );
@@ -49,7 +49,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 				$disable_rest_api = $settings->setting_is_enabled( 'general', 'disable-rest-api' );
 
 				if ( $disable_rest_api ) {
-					$enabled = false;
+					$enabled = new WP_Error( 'rest_disabled', __( 'The REST API is disabled on this site.' ) );
 				}
 
 			}

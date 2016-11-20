@@ -8,7 +8,7 @@ class REST_API_Toolbox_Test_General extends WP_UnitTestCase {
 		$settings->change_enabled_setting( 'general', 'disable-rest-api', true );
 
 		$this->assertEquals( true, $settings->setting_is_enabled( 'general', 'disable-rest-api' ) );
-		$this->assertEquals( false, apply_filters( 'rest_enabled', false ) );
+		$this->$this->assertInstanceOf( new WP_Error(), apply_filters( 'rest_authentication_errors', null ) );
 
 	}
 
@@ -18,8 +18,7 @@ class REST_API_Toolbox_Test_General extends WP_UnitTestCase {
 		$settings->change_enabled_setting( 'general', 'disable-rest-api', false );
 
 		$this->assertEquals( false, $settings->setting_is_enabled( 'general', 'disable-rest-api' ) );
-		$this->assertEquals( true, apply_filters( 'rest_enabled', true ) );
-
+		$this->assertEquals( null, apply_filters( 'rest_authentication_errors', null ) );
 	}
 
 	function test_jsonp_disabled() {

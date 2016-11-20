@@ -39,6 +39,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 				'taxonomies',
 				'types',
 				'statuses',
+				'settings',
 			);
 			return apply_filters( 'rest-api-toolbox-core-endpoints', $endpoints );
 		}

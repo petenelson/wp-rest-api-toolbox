@@ -6,34 +6,34 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_SSL' ) ) {
 
 	class REST_API_Toolbox_Settings_SSL extends REST_API_Toolbox_Settings_Base {
 
-		private $settings_key  = 'rest-api-toolbox-settings-ssl';
+		static $settings_key  = 'rest-api-toolbox-settings-ssl';
 
-		public function plugins_loaded() {
-			add_action( 'admin_init', array( $this, 'register_ssl_settings' ) );
-			add_filter( 'rest-api-toolbox-settings-tabs', array( $this, 'add_tab') );
+		static public function plugins_loaded() {
+			add_action( 'admin_init', array( __CLASS__, 'register_ssl_settings' ) );
+			add_filter( 'rest-api-toolbox-settings-tabs', array( __CLASS__, 'add_tab') );
 		}
 
-		public function add_tab( $tabs ) {
-			$tabs[ $this->settings_key ] = __( 'SSL', 'rest-api-toolbox' );
+		static public function add_tab( $tabs ) {
+			$tabs[ self::$settings_key ] = __( 'SSL', 'rest-api-toolbox' );
 			return $tabs;
 		}
 
-		public function register_ssl_settings( $title ) {
-			$key = $this->settings_key;
+		static public function register_ssl_settings( $title ) {
+			$key = self::$settings_key;
 
-			register_setting( $key, $key, array( $this, 'sanitize_ssl_settings') );
+			register_setting( $key, $key, array( __CLASS__, 'sanitize_ssl_settings') );
 
 			$section = 'ssl';
 
 			add_settings_section( $section, '', null, $key );
 
-			add_settings_field( 'require-ssl', __( 'Require SSL', 'rest-api-toolbox' ), array( $this, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'require-ssl', __( 'Require SSL', 'rest-api-toolbox' ), array( __CLASS__, 'settings_yes_no' ), $key, $section,
 				array( 'key' => $key, 'name' => 'require-ssl', 'after' => '' ) );
 
 		}
 
 
-		public function sanitize_ssl_settings( $settings ) {
+		static public function sanitize_ssl_settings( $settings ) {
 
 			return $settings;
 		}

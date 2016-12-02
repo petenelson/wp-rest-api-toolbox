@@ -95,7 +95,7 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 			REST_API_Toolbox_Settings::change_enabled_setting( 'core', $remove_endpoint, false );
 
 			$this->assertEquals( false, REST_API_Toolbox_Settings::setting_is_enabled( 'core', $remove_endpoint ) );
-			$this->assertTrue( $this->endpoint_exists( $endpoint ), $endpoint );
+			$this->assertTrue( $this->endpoint_exists( $endpoint ), $endpoint . ' does not exist' );
 
 		}
 

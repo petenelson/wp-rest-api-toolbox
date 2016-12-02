@@ -4,30 +4,31 @@ class REST_API_Toolbox_Test_General extends WP_UnitTestCase {
 
 	function test_rest_api_disabled() {
 
+		// TODO
+		// global $wp_version;
+		// var_dump( $wp_version >= 4.6 );
+		// die();
+
+		// Set the disabled setting to true.
 		REST_API_Toolbox_Settings::change_enabled_setting( 'general', 'disable-rest-api', true );
 
-<<<<<<< HEAD
-		$this->assertEquals( true, $settings->setting_is_enabled( 'general', 'disable-rest-api' ) );
-		$this->$this->assertInstanceOf( new WP_Error(), apply_filters( 'rest_authentication_errors', null ) );
-=======
+		// Verfiy the setting.
 		$this->assertEquals( true, REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' ) );
-		$this->assertEquals( false, apply_filters( 'rest_enabled', false ) );
->>>>>>> dabe5967af1c0182eb8faa67516134fa02b908ab
 
+		// Verify that the REST API is disabled.
+		$this->assertInstanceOf( 'WP_Error', apply_filters( 'rest_authentication_errors', true ) );
 	}
 
 	function test_rest_api_enabled() {
 
+		// Set the disabled setting to false.
 		REST_API_Toolbox_Settings::change_enabled_setting( 'general', 'disable-rest-api', false );
 
-<<<<<<< HEAD
-		$this->assertEquals( false, $settings->setting_is_enabled( 'general', 'disable-rest-api' ) );
-		$this->assertEquals( null, apply_filters( 'rest_authentication_errors', null ) );
-=======
+		// Verify the setting.
 		$this->assertEquals( false, REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' ) );
-		$this->assertEquals( true, apply_filters( 'rest_enabled', true ) );
 
->>>>>>> dabe5967af1c0182eb8faa67516134fa02b908ab
+		// Verify that the REST API is not disabled.
+		$this->assertEquals( true, apply_filters( 'rest_authentication_errors', true ) );
 	}
 
 	function test_jsonp_disabled() {

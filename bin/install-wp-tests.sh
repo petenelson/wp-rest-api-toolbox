@@ -113,8 +113,8 @@ install_db() {
 	fi
 
 	# create database
+	mysql -u$DB_USER -p$DB_PASS -e "DROP DATABASE IF EXISTS $DB_NAME"
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
-
 }
 
 install_rest_api() {
@@ -122,8 +122,8 @@ install_rest_api() {
      if [ ! -d "$WP_CORE_DIR/wp-content/plugins/rest-api" ]; then
 
 		mkdir -p $WP_CORE_DIR/wp-content/plugins/rest-api
-		download https://downloads.wordpress.org/plugin/rest-api.2.0-beta13.zip  $WP_CORE_DIR/rest-api.2.0-beta13.zip
-		unzip $WP_CORE_DIR/rest-api.2.0-beta13.zip -d $WP_CORE_DIR/wp-content/plugins
+		download https://downloads.wordpress.org/plugin/rest-api.2.0-beta15.zip  $WP_CORE_DIR/rest-api.2.0-beta15.zip
+		unzip $WP_CORE_DIR/rest-api.2.0-beta15.zip -d $WP_CORE_DIR/wp-content/plugins
 		ls -la $WP_CORE_DIR/wp-content/plugins/rest-api
 	fi
 }

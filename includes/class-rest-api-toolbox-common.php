@@ -61,6 +61,9 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 
 		static public function core_endpoints() {
+
+			global $wp_version;
+
 			$endpoints = array(
 				'posts',
 				'pages',
@@ -72,8 +75,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 				'taxonomies',
 				'types',
 				'statuses',
-				'settings',
 			);
+
+			if ( $wp_version >= 4.7 ) {
+				$endpoints[] = 'settings';
+			}
+
 			return apply_filters( 'rest-api-toolbox-core-endpoints', $endpoints );
 		}
 

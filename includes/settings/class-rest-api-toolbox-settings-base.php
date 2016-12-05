@@ -113,10 +113,14 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 			$min_max_step = '';
 			if ( $type === 'number' ) {
-				$min = intval( $args['min'] );
-				$max = intval( $args['max'] );
-				$step = intval( $args['step'] );
-				$min_max_step = " step='{$step}' min='{$min}' max='{$max}' ";
+				$min = absint( $args['min'] );
+				$max = absint( $args['max'] );
+				$step = absint( $args['step'] );
+				$min_max_step = sprintf( ' step="%1$s" min="%2$s" max="%3$s" ',
+					esc_attr( $step ),
+					esc_attr( $min ),
+					esc_attr( $max )
+					);
 			}
 
 			?>
@@ -138,28 +142,46 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 
 		static public function settings_yes_no( $args ) {
 
-			extract( wp_parse_args( $args,
+			$args = wp_parse_args( $args,
 				array(
 					'name' => '',
 					'key' => '',
 					'after' => '',
 				)
-			) );
+			);
+
+			$name    = $args['name'];
+			$key     = $args['key'];
+			$after   = $args['after'];
 
 			$option = get_option( $key );
-			$value = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
+			$value = isset( $option[ $name ] ) ? $option[ $name ] : '';
 
 			if ( empty( $value ) ) {
 				$value = '0';
 			}
 
 			echo '<div>';
-			echo "<label><input id='{$name}_1' name='{$key}[{$name}]'  type='radio' value='1' " . ( '1' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'Yes' ) . "</label> ";
-			echo "<label><input id='{$name}_0' name='{$key}[{$name}]'  type='radio' value='0' " . ( '0' === $value ? " checked=\"checked\"" : "" ) . "/>" . esc_html__( 'No' ) . "</label> ";
+
+			// Yes radio button.	
+			printf( '<label for="%1$s"><input id="%1$s" name="%2$s" type="radio" value="1" %3$s />%4$s</label> ',
+				esc_attr( "{$name}_1" ),
+				esc_attr( "{$key}[{$name}]" ),
+				checked( '1', $value, false ),
+				esc_html__( 'Yes' )
+				);
+
+			// No radio button.
+			printf( '<label for="%1$s"><input id="%1$s" name="%2$s" type="radio" value="0" %3$s />%4$s</label> ',
+				esc_attr( "{$name}_0" ),
+				esc_attr( "{$key}[{$name}]" ),
+				checked( '0', $value, false ),
+				esc_html__( 'No' )
+				);
+
 			echo '</div>';
 
 			self::output_after( $after );
-
 		}
 
 

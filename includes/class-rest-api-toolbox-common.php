@@ -221,7 +221,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			}
 
 			return $routes;
-
 		}
 
 

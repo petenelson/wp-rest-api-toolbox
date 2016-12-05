@@ -75,22 +75,22 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 		}
 
 
-		private function current_tab() {
+		static public function current_tab() {
 			$current_tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_STRING );
 			return empty( $current_tab ) ? 'rest-api-toolbox-settings-general' : $current_tab;
 		}
 
 
-		private function plugin_options_tabs() {
+		static public function plugin_options_tabs() {
 			$current_tab = self::current_tab();
 
-			echo '<h2>' . __( 'Settings' ) . ' &rsaquo; REST API Toolbox</h2><h2 class="nav-tab-wrapper">';
+			echo '<h2>' . esc_html__( 'Settings' ) . ' &rsaquo; REST API Toolbox</h2><h2 class="nav-tab-wrapper">';
 
 			$tabs = apply_filters( 'rest-api-toolbox-settings-tabs', array() );
 
 			foreach ( $tabs as $tab_key => $tab_caption ) {
 				$active = $current_tab === $tab_key ? 'nav-tab-active' : '';
-				echo '<a class="nav-tab ' . $active . '" href="?page=' . urlencode( self::$settings_page ) . '&tab=' . urlencode( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
+				echo '<a class="nav-tab ' . sanitize_html_class( $active ) . '" href="?page=' . urlencode( self::$settings_page ) . '&tab=' . urlencode( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
 			}
 			echo '</h2>';
 		}

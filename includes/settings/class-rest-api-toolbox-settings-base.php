@@ -109,7 +109,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			$step      = $args['step'];
 
 			$option = get_option( $key );
-			$value = isset( $option[ $name ] ) ? esc_attr( $option[ $name ] ) : '';
+			$value = isset( $option[ $name ] ) ? $option[ $name ] : '';
 
 			$min_max_step = '';
 			if ( $type === 'number' ) {
@@ -119,71 +119,22 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 				$min_max_step = " step='{$step}' min='{$min}' max='{$max}' ";
 			}
 
-			echo "<div><input id='{$name}' name='{$key}[{$name}]'  type='{$type}' value='" . $value . "' size='{$size}' maxlength='{$maxlength}' {$min_max_step} /></div>";
-
-			self::output_after( $after );
-
-		}
-
-
-		static public function settings_checkbox_list( $args ) {
-			extract( wp_parse_args( $args,
-				array(
-					'name' => '',
-					'key' => '',
-					'items' => array(),
-					'after' => '',
-					'legend' => '',
-				)
-			) );
-
-			$option = get_option( $key );
-			$values = isset( $option[$name] ) ? $option[$name] : '';
-			if ( ! is_array( $values ) ) {
-				$values = array();
-			}
-
 			?>
-				<fieldset>
-					<legend class="screen-reader-text">
-						<?php echo esc_html( $legend ) ?>
-					</legend>
-
-					<?php foreach ( $items as $value => $value_dispay ) : ?>
-						<label>
-							<input type="checkbox" name="<?php echo $key ?>[<?php echo $name ?>][]" value="<?php echo $value ?>" <?php checked( in_array( $value, $values) ); ?> />
-							<?php echo esc_html( $value_dispay ); ?>
-						</label>
-						<br/>
-					<?php endforeach; ?>
-				</fieldset>
+				<div>
+					<input
+						id="<?php echo esc_attr( $name ); ?> "
+						name="<?php echo esc_attr( "{$key}[{$name}]" ) ?>"
+						type="<?php echo esc_attr( $type ); ?>"
+						value="<?php echo esc_attr( $value ); ?>"
+						size="<?php echo esc_attr( $size ); ?>"
+						maxlength="<?php echo esc_attr( $maxlength ); ?>"
+						{$min_max_step}
+						/>
+				</div>
 			<?php
 
-		}
-
-
-		static public function settings_textarea( $args ) {
-
-			extract( wp_parse_args( $args,
-				array(
-					'name' => '',
-					'key' => '',
-					'rows' => 10,
-					'cols' => 40,
-					'after' => '',
-				)
-			) );
-
-
-			$option = get_option( $key );
-			$value = isset( $option[$name] ) ? esc_attr( $option[$name] ) : '';
-
-			echo "<div><textarea id='{$name}' name='{$key}[{$name}]' rows='{$rows}' cols='{$cols}'>" . $value . "</textarea></div>";
-
 			self::output_after( $after );
-
 		}
-
 
 		static public function settings_yes_no( $args ) {
 

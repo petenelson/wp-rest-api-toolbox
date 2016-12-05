@@ -8,18 +8,36 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		static public function plugins_loaded() {
 
-			add_filter( 'rest_authentication_errors',   array( $this, 'rest_api_disabled_filter' ), 100 );
+			// Setup disabled filter based on the changing in WP 4.7
+			if ( REST_API_Toolbox_Common::wp_version_at_least( '4.7' ) ) {
+				add_filter( 'rest_authentication_errors',   array( __CLASS__, 'rest_authentication_errors_filter' ), 100 );
+			} else {
+				add_filter( 'rest_enabled',                 array( __CLASS__, 'rest_enabled_filter' ), 100 );
+			}
+
+			// Filter hook to disable JSONP.
 			add_filter( 'rest_jsonp_enabled',           array( __CLASS__, 'rest_jsonp_disabled_filter' ), 100 );
 
+			// Filter hook to force SSL.
 			add_filter( 'rest_pre_dispatch',            array( __CLASS__, 'disallow_non_ssl' ), 100, 3 );
 
-
+			// Filter hooks to remove endpoints.
 			add_filter( 'rest_index',                   array( __CLASS__, 'remove_wordpress_core_namespace' ), 100, 3 );
 			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_all_core_endpoints'), 100, 1 );
 			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_selected_core_endpoints'), 100, 1 );
 
 		}
 
+		/**
+		 * Returns true if the WordPress version is at least the supplied
+		 * version.
+		 *
+		 * @param string $version The version number to compare.
+		 * @return bool
+		 */
+		static public function wp_version_at_least( $version ) {
+			return version_compare( get_bloginfo('version' ), $version )  >= 0;
+		}
 
 		static public function endpoint_exists( $endpoint ) {
 
@@ -62,8 +80,6 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 		static public function core_endpoints() {
 
-			global $wp_version;
-
 			$endpoints = array(
 				'posts',
 				'pages',
@@ -77,25 +93,50 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 				'statuses',
 			);
 
-			if ( $wp_version >= 4.7 ) {
+			// Add the settings endpoint introduced in 4.7
+			if ( REST_API_Toolbox_Common::wp_version_at_least( '4.7' ) ) {
 				$endpoints[] = 'settings';
 			}
 
 			return apply_filters( 'rest-api-toolbox-core-endpoints', $endpoints );
 		}
 
-		static public function rest_api_disabled_filter( $enabled ) {
+		/**
+		 * Filter hook for disabling the REST API in WordPress 4.7 and higher.
+		 *
+		 * @param  mixed $error Default value.
+		 * @return mixed        WP_Error if disabled, otherwise the default value.
+		 */
+		static public function rest_authentication_errors_filter( $error ) {
+			if ( $error ) {
+				$disable_rest_api = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' );
+
+				if ( $disable_rest_api ) {
+					$error = new WP_Error( 'rest_disabled', __( 'The REST API is disabled on this site.' ) );
+				}
+			}
+
+			return $error;
+		}
+
+		/**
+		 * Filter hook for disabling the REST API in WordPress 4.6 and earlier.
+		 *
+		 * @param  bool $enabled Default value.
+		 * @return bool          False if disabled, otherwise the default value.
+		 */
+		static public function rest_enabled_filter( $enabled ) {
 			if ( $enabled ) {
 				$disable_rest_api = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' );
 
 				if ( $disable_rest_api ) {
-					$enabled = new WP_Error( 'rest_disabled', __( 'The REST API is disabled on this site.' ) );
+					$enabled = false;
 				}
 
 			}
+
 			return $enabled;
 		}
-
 
 		static public function rest_jsonp_disabled_filter( $enabled ) {
 			if ( $enabled ) {

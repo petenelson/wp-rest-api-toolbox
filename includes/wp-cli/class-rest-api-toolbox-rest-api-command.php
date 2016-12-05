@@ -100,7 +100,13 @@ class REST_API_Toolbox_REST_API_Command extends REST_API_Toolbox_Base_Command  {
 
 		} else {
 
-			$enabled = apply_filters( 'rest_enabled', true );
+			if ( REST_API_Toolbox_Common::wp_version_at_least( '4.7' ) ) {
+				// If we get a WP_Error back, the API is disabled.
+				$enabled = ! is_wp_error( apply_filters( 'rest_authentication_errors', null ) );
+			} else {
+				$enabled = apply_filters( 'rest_enabled', true );
+			}
+
 			if ( $enabled ) {
 				WP_CLI::Line( "The REST API is enabled." );
 			} else {

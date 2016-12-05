@@ -40,7 +40,7 @@ Have any questions?  We can answer them here?
 
 == Changelog ==
 
-= 1.2.0 December 2nd, 2016 =
+= 1.2.0 December 5th, 2016 =
 * Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.
 * Added 'settings' to the list of core endpoints that can be removed.
 * Added CLI command: wp rest-api-toolbox status
@@ -57,7 +57,7 @@ Have any questions?  We can answer them here?
 
 == Changelog ==
 
-= 1.2.0 December 2nd, 2016 =
+= 1.2.0 December 5th, 2016 =
 * Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.
 * Added 'settings' to the list of core endpoints that can be removed.
 * Added CLI command: wp rest-api-toolbox status

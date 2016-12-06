@@ -7,7 +7,7 @@ if ( ! class_exists( 'REST_API_Toolbox_i18n' ) ) {
 	class REST_API_Toolbox_i18n {
 
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 
 			load_plugin_textdomain(
 				'rest-api-toolbox',

@@ -6,15 +6,15 @@ if ( ! class_exists( 'REST_API_Toolbox_Prefix' ) ) {
 
 	class REST_API_Toolbox_Prefix extends REST_API_Toolbox_Base {
 
-		public function plugins_loaded() {
+		static public function plugins_loaded() {
 
-			add_filter( 'rest_url_prefix', array( $this, 'change_url_prefix' ), 100 );
+			add_filter( 'rest_url_prefix', array( __CLASS__, 'change_url_prefix' ), 100 );
 
 		}
 
-		public function change_url_prefix( $prefix ) {
+		static public function change_url_prefix( $prefix ) {
 
-			$custom_prefix   = $this->settings->setting_get( 'general', 'rest-api-prefix' );
+			$custom_prefix   = REST_API_Toolbox_Settings::setting_get( 'general', 'rest-api-prefix' );
 			$prefix          = ! empty( $custom_prefix ) ? $custom_prefix : $prefix;
 
 			return $prefix;

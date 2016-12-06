@@ -6,28 +6,80 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 	class REST_API_Toolbox_Common {
 
-		public function plugins_loaded() {
-			
-			add_filter( 'rest_enabled',         array( $this, 'rest_api_disabled_filter' ), 100 );
-			add_filter( 'rest_jsonp_enabled',   array( $this, 'rest_jsonp_disabled_filter' ), 100 );
+		static public function plugins_loaded() {
 
-			add_filter( 'rest_pre_dispatch',    array( $this, 'disallow_non_ssl' ), 100, 3 );
+			// Setup disabled filter based on the changing in WP 4.7
+			if ( REST_API_Toolbox_Common::wp_version_at_least( '4.7' ) ) {
+				add_filter( 'rest_authentication_errors',   array( __CLASS__, 'rest_authentication_errors_filter' ), 100 );
+			} else {
+				add_filter( 'rest_enabled',                 array( __CLASS__, 'rest_enabled_filter' ), 100 );
+			}
 
+			// Filter hook to disable JSONP.
+			add_filter( 'rest_jsonp_enabled',           array( __CLASS__, 'rest_jsonp_disabled_filter' ), 100 );
 
-			add_filter( 'rest_index',           array( $this, 'remove_wordpress_core_namespace' ), 100, 3 );
-			add_filter( 'rest_endpoints',       array( $this, 'remove_all_core_endpoints'), 100, 1 );
+			// Filter hook to force SSL.
+			add_filter( 'rest_pre_dispatch',            array( __CLASS__, 'disallow_non_ssl' ), 100, 3 );
 
-			add_filter( 'rest_endpoints',       array( $this, 'remove_selected_core_endpoints'), 100, 1 );
+			// Filter hooks to remove endpoints.
+			add_filter( 'rest_index',                   array( __CLASS__, 'remove_wordpress_core_namespace' ), 100, 3 );
+			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_all_core_endpoints'), 100, 1 );
+			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_selected_core_endpoints'), 100, 1 );
+
+		}
+
+		/**
+		 * Returns true if the WordPress version is at least the supplied
+		 * version.
+		 *
+		 * @param string $version The version number to compare.
+		 * @return bool
+		 */
+		static public function wp_version_at_least( $version ) {
+			return version_compare( get_bloginfo('version' ), $version )  >= 0;
+		}
+
+		static public function endpoint_exists( $endpoint ) {
+
+			rest_api_loaded();
+
+			$wp_rest_server = self::get_rest_api_server();
+			$routes = $wp_rest_server->get_routes();
+
+			$endpoint_exists = false;
+			foreach ( array_keys( $routes ) as $route_endpoint ) {
+				if ( 0 === stripos( $route_endpoint, $endpoint ) ) {
+					$endpoint_exists = true;
+					break;
+				}
+			}
+
+			return $endpoint_exists;
+
+		}
+
+		static public function get_rest_api_server() {
+
+			global $wp_rest_server;
+
+			if ( is_null( $wp_rest_server ) ) {
+				$wp_rest_server_class = apply_filters( 'wp_rest_server_class', 'WP_REST_Server' );
+				$wp_rest_server = new $wp_rest_server_class;
+				do_action( 'rest_api_init', $wp_rest_server );
+			}
+
+			return $wp_rest_server;
 
 		}
 
 
-		public function core_namespace() {
+		static public function core_namespace() {
 			return apply_filters( 'rest-api-toolbox-core-namespace', 'wp/v2' );
 		}
 
 
-		public function core_endpoints() {
+		static public function core_endpoints() {
+
 			$endpoints = array(
 				'posts',
 				'pages',
@@ -40,27 +92,55 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 				'types',
 				'statuses',
 			);
+
+			// Add the settings endpoint introduced in 4.7
+			if ( REST_API_Toolbox_Common::wp_version_at_least( '4.7' ) ) {
+				$endpoints[] = 'settings';
+			}
+
 			return apply_filters( 'rest-api-toolbox-core-endpoints', $endpoints );
 		}
 
-		public function rest_api_disabled_filter( $enabled ) {
+		/**
+		 * Filter hook for disabling the REST API in WordPress 4.7 and higher.
+		 *
+		 * @param  mixed $error Default value.
+		 * @return mixed        WP_Error if disabled, otherwise the default value.
+		 */
+		static public function rest_authentication_errors_filter( $error ) {
+			if ( $error ) {
+				$disable_rest_api = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' );
+
+				if ( $disable_rest_api ) {
+					$error = new WP_Error( 'rest_disabled', __( 'The REST API is disabled on this site.' ) );
+				}
+			}
+
+			return $error;
+		}
+
+		/**
+		 * Filter hook for disabling the REST API in WordPress 4.6 and earlier.
+		 *
+		 * @param  bool $enabled Default value.
+		 * @return bool          False if disabled, otherwise the default value.
+		 */
+		static public function rest_enabled_filter( $enabled ) {
 			if ( $enabled ) {
-				$settings = new REST_API_Toolbox_Settings();
-				$disable_rest_api = $settings->setting_is_enabled( 'general', 'disable-rest-api' );
+				$disable_rest_api = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' );
 
 				if ( $disable_rest_api ) {
 					$enabled = false;
 				}
 
 			}
+
 			return $enabled;
 		}
 
-
-		public function rest_jsonp_disabled_filter( $enabled ) {
+		static public function rest_jsonp_disabled_filter( $enabled ) {
 			if ( $enabled ) {
-				$settings = new REST_API_Toolbox_Settings();
-				$disable_jsonp = $settings->setting_is_enabled( 'general', 'disable-jsonp' );
+				$disable_jsonp = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-jsonp' );
 
 				if ( $disable_jsonp ) {
 					$enabled = false;
@@ -71,11 +151,10 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function disallow_non_ssl( $response, $server, $request ) {
+		static public function disallow_non_ssl( $response, $server, $request ) {
 			if ( ! is_ssl() ) {
 
-				$settings = new REST_API_Toolbox_Settings();
-				$require_ssl = $settings->setting_is_enabled( 'ssl', 'require-ssl' );
+				$require_ssl = REST_API_Toolbox_Settings::setting_is_enabled( 'ssl', 'require-ssl' );
 
 				if ( $require_ssl ) {
 					$response = new WP_Error( 'rest_forbidden', __( "SSL is required to access the REST API" ), array( 'status' => 403 ) );
@@ -86,14 +165,13 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_wordpress_core_namespace( $response ) {
+		static public function remove_wordpress_core_namespace( $response ) {
 
-			$settings = new REST_API_Toolbox_Settings();
-			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
+			$remove_all = REST_API_Toolbox_Settings::setting_is_enabled( 'core', 'remove-all-core-routes' );
 			if ( $remove_all ) {
 				if ( ! empty( $response->data ) && ! empty( $response->data['namespaces'] ) ) {
 					for( $i = count( $response->data['namespaces'] ) - 1; $i >= 0; $i-- ) {
-						if ( $this->core_namespace() === $response->data['namespaces'][ $i ] ) {
+						if ( self::core_namespace() === $response->data['namespaces'][ $i ] ) {
 							unset( $response->data['namespaces'][ $i ] );
 							$response->data['namespaces'] = array_values( $response->data['namespaces'] );
 							break;
@@ -105,23 +183,21 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		public function remove_all_core_endpoints( $routes ) {
+		static public function remove_all_core_endpoints( $routes ) {
 
-			$settings = new REST_API_Toolbox_Settings();
-			$remove_all = $settings->setting_is_enabled( 'core', 'remove-all-core-routes' );
+			$remove_all = REST_API_Toolbox_Settings::setting_is_enabled( 'core', 'remove-all-core-routes' );
 
 			if ( $remove_all ) {
-				$routes = $this->remove_endpoint( $routes, '/' . $this->core_namespace() );
+				$routes = self::remove_endpoint( $routes, '/' . self::core_namespace() );
 			}
 
 			return $routes;
 		}
 
 
-		public function remove_selected_core_endpoints( $routes ) {
+		static public function remove_selected_core_endpoints( $routes ) {
 
-			$settings = new REST_API_Toolbox_Settings();
-			$core_settings = get_option( $settings->options_key( 'core' ) );
+			$core_settings = get_option( REST_API_Toolbox_Settings::options_key( 'core' ) );
 			$core_settings = ! is_array( $core_settings ) ? array() : $core_settings;
 
 			$pattern = "/remove-endpoint\\|(.+)/";
@@ -141,15 +217,14 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			$endpoints = apply_filters( 'rest-api-toolbox-remove-endpoints', $endpoints );
 
 			foreach ( $endpoints as $endpoint ) {
-				$routes = $this->remove_endpoint( $routes, $endpoint );
+				$routes = self::remove_endpoint( $routes, $endpoint );
 			}
 
 			return $routes;
-
 		}
 
 
-		public function remove_endpoint( $routes, $remove_endpoint ) {
+		static public function remove_endpoint( $routes, $remove_endpoint ) {
 			foreach ( array_keys( $routes ) as $endpoint ) {
 				if ( 0 === strpos( $endpoint, $remove_endpoint ) ) {
 					unset( $routes[ $endpoint ] );

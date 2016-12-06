@@ -2,9 +2,9 @@
 **Contributors:** gungeekatx  
 **Tags:** rest api, rest, wp rest api  
 **Donate link:** https://petenelson.io/  
-**Requires at least:** 4.4  
-**Tested up to:** 4.6  
-**Stable tag:** 1.1.0  
+**Requires at least:** 4.6  
+**Tested up to:** 4.7  
+**Stable tag:** 1.2.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -48,6 +48,11 @@ Have any questions?  We can answer them here?
 
 ## Changelog ##
 
+### 1.2.0 December 5th, 2016 ###
+* Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.
+* Added 'settings' to the list of core endpoints that can be removed.
+* Added CLI command: wp rest-api-toolbox status
+
 ### 1.1.0 April 16, 2016 ###
 * Change REST API prefix
 * Remove specific core endpoints
@@ -58,10 +63,14 @@ Have any questions?  We can answer them here?
 
 ## Upgrade Notice ##
 
+## Changelog ##
+
+### 1.2.0 December 5th, 2016 ###
+* Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.
+* Added 'settings' to the list of core endpoints that can be removed.
+* Added CLI command: wp rest-api-toolbox status
+
 ### 1.1.0 April 16, 2016 ###
 * Change REST API prefix
 * Remove specific core endpoints
 * Disable JSONP
-
-### 1.0.0 April 15, 2016 ###
-* Initial release

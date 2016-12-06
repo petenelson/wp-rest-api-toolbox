@@ -2,6 +2,7 @@
 /.DS_Store
 /node_modules
 /composer.lock
+/composer.phar
 /vendor
 /release
 /build

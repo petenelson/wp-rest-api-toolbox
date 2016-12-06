@@ -2,7 +2,7 @@
 **Contributors:** gungeekatx  
 **Tags:** rest api, rest, wp rest api  
 **Donate link:** https://petenelson.io/  
-**Requires at least:** 4.6  
+**Requires at least:** 4.4  
 **Tested up to:** 4.7  
 **Stable tag:** 1.2.0  
 **License:** GPLv2 or later  

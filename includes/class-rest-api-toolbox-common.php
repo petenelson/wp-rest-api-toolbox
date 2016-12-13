@@ -26,6 +26,8 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_all_core_endpoints'), 100, 1 );
 			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_selected_core_endpoints'), 100, 1 );
 
+			// Filter hook to require authentication for specific endpoints.
+			add_filter( 'rest_pre_dispatch',            array( __CLASS__, 'endpoint_requires_authentication_filter' ), 100, 3 );
 		}
 
 		/**
@@ -112,7 +114,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 				$disable_rest_api = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' );
 
 				if ( $disable_rest_api ) {
-					$error = new WP_Error( 'rest_disabled', __( 'The REST API is disabled on this site.' ) );
+					$error = new WP_Error( 'rest_disabled', __( 'The REST API is disabled on this site.' ), array( 'status' => 404 ) );
 				}
 			}
 
@@ -233,6 +235,39 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			return $routes;
 		}
 
+		/**
+		 * Filter hook to require authentication on specific endpoints.
+		 *
+		 * @param mixed           $result      Response to replace the requested version with. Can be anything
+		 *                                     a normal endpoint can return, or null to not hijack the request.
+		 * @param WP_REST_Server  $rest_server Server instance.
+		 * @param WP_REST_Request $request     Request used to generate the response.
+		 * @return mixed
+		 */
+		static public function endpoint_requires_authentication_filter( $result, $rest_server, $request ) {
+
+			// Get the route for the request.
+			$route = $request->get_route();
+
+			// Get the settings for core.
+			$core_settings = get_option( REST_API_Toolbox_Settings::options_key( 'core' ) );
+			$key = 'require-authentication|' . $route;
+
+			// See if this route is configured to require authentication and
+			// if there is a current user logged in.
+			if ( ! empty( $core_settings ) && isset( $core_settings[ $key ] ) && '1' === $core_settings[ $key ] && ! is_user_logged_in() ) {
+
+				// Return a WP_Error is authentication is required but there
+				// is no current user logged in.
+				$result = new WP_Error(
+					'rest_cannot_view',
+					sprintf( __( 'The REST API route %s requires authentication on this site.', 'rest-api-toolbox' ), $route ),
+					array( 'status' => 401 )
+				);
+			}
+
+			return $result;
+		}
 
 	}
 

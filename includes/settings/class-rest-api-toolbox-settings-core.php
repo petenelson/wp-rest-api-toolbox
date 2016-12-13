@@ -34,8 +34,19 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Core' ) ) {
 			$endpoints = REST_API_Toolbox_Common::core_endpoints();
 
 			foreach( $endpoints as $endpoint ) {
+
+				// Add yes/no options to remove the endpoint.
 				$name = 'remove-endpoint|/' . $namespace . '/' . $endpoint;
 				add_settings_field( $name, sprintf( __( 'Remove Endpoint: %s', 'rest-api-toolbox' ), $endpoint),
+					array( __CLASS__, 'settings_yes_no' ),
+					$key,
+					$section,
+					array( 'key' => $key, 'name' => $name, 'after' => '' )
+					);
+
+				// Add yes/no options to require authentication.
+				$name = 'require-authentication|/' . $namespace . '/' . $endpoint;
+				add_settings_field( $name, sprintf( __( 'Require Authentication: %s', 'rest-api-toolbox' ), $endpoint),
 					array( __CLASS__, 'settings_yes_no' ),
 					$key,
 					$section,

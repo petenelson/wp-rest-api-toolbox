@@ -21,6 +21,8 @@ engines:
         enabled: false
       Controversial/CamelCaseVariableName:
         enabled: false
+      Controversial/CamelCaseFunctionName:
+        enabled: false
       CleanCode/ElseExpression:
         enabled: false
 ratings:
@@ -30,3 +32,4 @@ ratings:
   - "**.php"
 exclude_paths:
 - tests/
+- features/

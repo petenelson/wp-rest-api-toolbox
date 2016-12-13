@@ -14,8 +14,9 @@ Allows tweaking of several REST API settings
 
 Allows tweaking of several REST API settings
 
-* Disaple the REST API
+* Disable the REST API
 * Remove WordPress core endpoints
+* Require authentication for core endpoints
 * Force SSL
 * WP-CLI commands: wp rest-api-toolbox
 

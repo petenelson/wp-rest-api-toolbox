@@ -4,7 +4,7 @@ Tags: rest api, rest, wp rest api
 Donate link: https://petenelson.io/
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Have any questions?  We can answer them here?
 
 == Changelog ==
 
+= 1.3.0 December 12th, 2016 =
+* Added option to require authentication for core endpoints.
+
 = 1.2.0 December 5th, 2016 =
 * Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.
 * Added 'settings' to the list of core endpoints that can be removed.
@@ -56,6 +59,9 @@ Have any questions?  We can answer them here?
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.3.0 December 12th, 2016 =
+* Added option to require authentication for core endpoints.
 
 = 1.2.0 December 5th, 2016 =
 * Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.

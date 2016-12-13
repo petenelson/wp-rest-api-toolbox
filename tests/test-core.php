@@ -101,4 +101,47 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 	}
 
+	function test_require_authentication_core_endpoints() {
+
+		$namespace   = REST_API_Toolbox_Common::core_namespace();
+
+		foreach( REST_API_Toolbox_Common::core_endpoints() as $endpoint ) {
+
+			$endpoint = '/' . $namespace . '/' . $endpoint;
+			$require_auth_endpoint = 'require-authentication|' . $endpoint;
+
+			REST_API_Toolbox_Settings::change_enabled_setting( 'core', $require_auth_endpoint, true );
+
+			$this->assertEquals( true, REST_API_Toolbox_Settings::setting_is_enabled( 'core', $require_auth_endpoint ) );
+
+			// Create a REST request
+			$request = new WP_REST_Request( 'GET', $endpoint );
+
+			// Verify that the request returns a WP_Error for rest_pre_dispatch
+			$this->assertInstanceOf( 'WP_Error', apply_filters( 'rest_pre_dispatch', array(), rest_get_server(), $request ) );
+		}
+	}
+
+
+	function test_do_not_require_authentication_core_endpoints() {
+
+		$namespace   = REST_API_Toolbox_Common::core_namespace();
+
+		foreach( REST_API_Toolbox_Common::core_endpoints() as $endpoint ) {
+
+			$endpoint = '/' . $namespace . '/' . $endpoint;
+			$require_auth_endpoint = 'require-authentication|' . $endpoint;
+
+			REST_API_Toolbox_Settings::change_enabled_setting( 'core', $require_auth_endpoint, false );
+
+			$this->assertEquals( false, REST_API_Toolbox_Settings::setting_is_enabled( 'core', $require_auth_endpoint ) );
+
+			// Create a REST request
+			$request = new WP_REST_Request( 'GET', $endpoint );
+
+			// Verify that the request returns the same result.
+			$this->assertEquals( array(), apply_filters( 'rest_pre_dispatch', array(), rest_get_server(), $request ) );
+		}
+	}
+
 }

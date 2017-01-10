@@ -185,10 +185,64 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 		}
 
 
+		static public function settings_checkbox( $args ) {
+
+			$args = wp_parse_args( $args,
+				array(
+					'name' => '',
+					'key' => '',
+					'after' => '',
+				)
+			);
+
+			$name    = $args['name'];
+			$key     = $args['key'];
+			$after   = $args['after'];
+
+			$option = get_option( $key );
+			$value = isset( $option[ $name ] ) ? $option[ $name ] : '';
+
+			if ( empty( $value ) ) {
+				$value = '0';
+			}
+
+			echo '<div>';
+
+			// Checkbox
+			printf( '<label for="%1$s"><input id="%1$s" name="%2$s" type="checkbox" value="1" %3$s /></label> ',
+				esc_attr( "{$name}_1" ),
+				esc_attr( "{$key}[{$name}]" ),
+				checked( '1', $value, false )
+				);
+
+			echo '</div>';
+
+			self::output_after( $after );
+		}
+
+		/**
+		 * Outputs trailing text after a settings input field.
+		 *
+		 * @param  string $after The trailing text.
+		 * @return void
+		 */
 		static public function output_after( $after ) {
 			if ( ! empty( $after ) ) {
-				echo '<div>' . wp_kses_post( $after ) . '</div>';
+				echo '<p class="description">' . wp_kses_post( $after ) . '</p>';
 			}
+		}
+
+		/**
+		 * Outputs a section header.
+		 *
+		 * @param  string $title The section header.
+		 * @return void
+		 */
+		static public function header( $title ) {
+			?>
+				<h2><?php echo esc_html( $title ); ?></h2>
+				<hr/>
+			<?php
 		}
 
 

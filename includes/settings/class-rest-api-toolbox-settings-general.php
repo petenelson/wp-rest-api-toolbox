@@ -27,10 +27,10 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_General' ) ) {
 
 			add_settings_section( $section, '', null, $key );
 
-			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( __CLASS__, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'disable-rest-api', __( 'Disable REST API', 'rest-api-toolbox' ), array( __CLASS__, 'settings_checkbox' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-rest-api', 'after' => '' ) );
 
-			add_settings_field( 'disable-jsonp', __( 'Disable JSONP Support', 'rest-api-toolbox' ), array( __CLASS__, 'settings_yes_no' ), $key, $section,
+			add_settings_field( 'disable-jsonp', __( 'Disable JSONP Support', 'rest-api-toolbox' ), array( __CLASS__, 'settings_checkbox' ), $key, $section,
 				array( 'key' => $key, 'name' => 'disable-jsonp', 'after' => '' ) );
 
 			add_settings_field( 'rest-api-prefix', __( 'REST API Prefix', 'rest-api-toolbox' ), array( __CLASS__, 'settings_input' ), $key, $section,

@@ -49,7 +49,8 @@ Have any questions?  We can answer them here?
 
 ## Changelog ##
 
-### 1.4.0 January 9th, 2017 ###
+### 1.4.0 January 11th, 2017 ###
+* Added link to settings page from the plugins list page.
 * Updated Settings UI for better clarity.
 
 ### 1.3.0 December 12th, 2016 ###

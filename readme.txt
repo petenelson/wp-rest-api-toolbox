@@ -4,7 +4,7 @@ Tags: rest api, rest, wp rest api
 Donate link: https://petenelson.io/
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Have any questions?  We can answer them here?
 2. WordPress core settings
 
 == Changelog ==
+
+= 1.4.0 January 9th, 2017 =
+* Updated Settings UI for better clarity.
 
 = 1.3.0 December 12th, 2016 =
 * Added option to require authentication for core endpoints.

@@ -18,6 +18,14 @@ class REST_API_Toolbox_Plugin {
 		if ( ! defined( 'REST_API_TOOLBOX_ROOT' ) ) {
 			define( 'REST_API_TOOLBOX_ROOT', trailingslashit( dirname( __FILE__ ) ) );
 		}
+
+		if ( ! defined( 'REST_API_TOOLBOX_FILE' ) ) {
+			define( 'REST_API_TOOLBOX_FILE', __FILE__ );
+		}
+
+		if ( ! defined( 'REST_API_TOOLBOX_BASENAME' ) ) {
+			define( 'REST_API_TOOLBOX_BASENAME', plugin_basename( REST_API_TOOLBOX_FILE ) );
+		}
 	}
 
 	static function get_required_files() {
@@ -26,6 +34,7 @@ class REST_API_Toolbox_Plugin {
 			'class-rest-api-toolbox-common',
 			'class-rest-api-toolbox-prefix',
 			'class-rest-api-toolbox-i18n',
+			'class-rest-api-toolbox-admin',
 			'settings/class-rest-api-toolbox-settings-base',
 			'settings/class-rest-api-toolbox-settings',
 			'settings/class-rest-api-toolbox-settings-general',
@@ -47,6 +56,7 @@ class REST_API_Toolbox_Plugin {
 			'REST_API_Toolbox_Common',
 			'REST_API_Toolbox_Prefix',
 			'REST_API_Toolbox_i18n',
+			'REST_API_Toolbox_Admin',
 			'REST_API_Toolbox_Settings_Base',
 			'REST_API_Toolbox_Settings',
 			'REST_API_Toolbox_Settings_General',

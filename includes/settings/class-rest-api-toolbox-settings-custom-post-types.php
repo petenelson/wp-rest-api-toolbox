@@ -2,42 +2,47 @@
 
 if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
-if ( ! class_exists( 'REST_API_Toolbox_Settings_Core' ) ) {
+if ( ! class_exists( 'REST_API_Toolbox_Settings_Custom_Post_Types' ) ) {
 
-	class REST_API_Toolbox_Settings_Core extends REST_API_Toolbox_Settings_Base {
+	class REST_API_Toolbox_Settings_Custom_Post_Types extends REST_API_Toolbox_Settings_Base {
 
-		static $settings_key  = 'rest-api-toolbox-settings-core';
+		static $settings_key  = 'rest-api-toolbox-settings-cpt';
 
+		/**
+		 * Hook up WordPress actions and filters.
+		 *
+		 * @return void
+		 */
 		static public function plugins_loaded() {
-			add_action( 'admin_init', array( __CLASS__, 'register_core_settings' ) );
+			add_action( 'admin_init', array( __CLASS__, 'register_cpt_settings' ) );
 			add_filter( 'rest-api-toolbox-settings-tabs', array( __CLASS__, 'add_tab') );
 		}
 
 		static public function add_tab( $tabs ) {
-			$tabs[ self::$settings_key ] = __( 'Core', 'rest-api-toolbox' );
+			$tabs[ self::$settings_key ] = __( 'Custom Post Types', 'rest-api-toolbox' );
 			return $tabs;
 		}
 
-		static public function register_core_settings() {
+		static public function register_cpt_settings() {
 			$key = self::$settings_key;
 
-			register_setting( $key, $key, array( __CLASS__, 'sanitize_core_settings') );
+			register_setting( $key, $key, array( __CLASS__, 'sanitize_cpt_settings') );
 
-			$section_remove = 'core-remove';
-			$section_auth = 'core-authentication';
+			$section_remove = 'cpt-remove';
+			$section_auth = 'cpt-authentication';
 
 			add_settings_section( $section_remove, '', array( __CLASS__, 'section_header_remove' ), $key );
 			add_settings_section( $section_auth, '', array( __CLASS__, 'section_header_require_authentication' ), $key );
 
-			add_settings_field( 'remove-all-core-routes', __( 'All WordPress Core Endpoints', 'rest-api-toolbox' ),
-				array( __CLASS__, 'settings_checkbox' ),
-				$key,
-				$section_remove,
-				array( 'key' => $key, 'name' => 'remove-all-core-routes', 'after' => '' )
-				);
-
 			$namespace = REST_API_Toolbox_Common::core_namespace();
-			$endpoints = REST_API_Toolbox_Common::core_endpoints();
+
+			// Get the list of custom post types.
+			$post_types = REST_API_Toolbox_Common::get_custom_post_types();
+
+			// Build the list of endpoints based on each post type's rest_base.
+			foreach( $post_types as $post_type_object ) {
+				$endpoints[] = $post_type_object->rest_base;
+			}
 
 			foreach( $endpoints as $endpoint ) {
 
@@ -59,16 +64,15 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Core' ) ) {
 					array( 'key' => $key, 'name' => $name, 'after' => '' )
 					);
 			}
-
 		}
 
 		/**
-		 * Performs any necessary sanitation on core settings.
+		 * Performs any necessary sanitation on custom post type settings.
 		 *
-		 * @param  array $settings Core settings
+		 * @param  array $settings Custom post type settings
 		 * @return array
 		 */
-		static public function sanitize_core_settings( $settings ) {
+		static public function sanitize_cpt_settings( $settings ) {
 			return $settings;
 		}
 	}

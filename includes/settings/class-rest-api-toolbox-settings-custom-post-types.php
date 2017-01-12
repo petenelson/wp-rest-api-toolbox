@@ -41,7 +41,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Custom_Post_Types' ) ) {
 
 			// Build the list of endpoints based on each post type's rest_base.
 			foreach( $post_types as $post_type_object ) {
-				$endpoints[] = $post_type_object->rest_base;
+				$endpoints[] = ! empty( $post_type_object->rest_base ) ? $post_type_object->rest_base : $post_type_object->name;
 			}
 
 			foreach( $endpoints as $endpoint ) {

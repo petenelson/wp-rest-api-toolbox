@@ -80,22 +80,3 @@ Have any questions?  We can answer them here?
 ### 1.3.0 December 12th, 2016 ###
 * Added option to require authentication for core endpoints.
 
-## Changelog ##
-
-### 1.4.0 January 13th, 2017 ###
-* Added support for removing or requiring authentication for custom post types.
-* Updated Settings UI for better clarity.
-* Added link to settings page from the plugins list page.
-
-### 1.3.0 December 12th, 2016 ###
-* Added option to require authentication for core endpoints.
-
-### 1.2.0 December 5th, 2016 ###
-* Updated the way the REST API can be disabled due to the rest_enabled filter being deprecated.
-* Added 'settings' to the list of core endpoints that can be removed.
-* Added CLI command: wp rest-api-toolbox status
-
-### 1.1.0 April 16, 2016 ###
-* Change REST API prefix
-* Remove specific core endpoints
-* Disable JSONP

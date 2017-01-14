@@ -41,7 +41,7 @@ Have any questions?  We can answer them here?
 
 == Changelog ==
 
-= 1.4.0 January 11th, 2017 =
+= 1.4.0 January 13th, 2017 =
 * Added support for removing or requiring authentication for custom post types.
 * Updated Settings UI for better clarity.
 * Added link to settings page from the plugins list page.

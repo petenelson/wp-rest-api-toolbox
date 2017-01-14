@@ -19,12 +19,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			add_filter( 'rest_jsonp_enabled',           array( __CLASS__, 'rest_jsonp_disabled_filter' ), 100 );
 
 			// Filter hook to force SSL.
-			add_filter( 'rest_pre_dispatch',            array( __CLASS__, 'disallow_non_ssl' ), 100, 3 );
+			add_filter( 'rest_pre_dispatch',            array( __CLASS__, 'disallow_non_ssl_filter' ), 100, 3 );
 
 			// Filter hooks to remove endpoints.
-			add_filter( 'rest_index',                   array( __CLASS__, 'remove_wordpress_core_namespace' ), 100, 3 );
-			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_all_core_endpoints'), 100, 1 );
-			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_selected_core_endpoints'), 100, 1 );
+			add_filter( 'rest_index',                   array( __CLASS__, 'remove_wordpress_core_namespace_filter' ), 100, 3 );
+			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_all_core_endpoints_filter'), 100, 1 );
+			add_filter( 'rest_endpoints',               array( __CLASS__, 'remove_selected_endpoints_filter'), 100, 1 );
 
 			// Filter hook to require authentication for specific endpoints.
 			add_filter( 'rest_pre_dispatch',            array( __CLASS__, 'endpoint_requires_authentication_filter' ), 100, 3 );
@@ -153,7 +153,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		static public function disallow_non_ssl( $response, $server, $request ) {
+		static public function disallow_non_ssl_filter( $response, $server, $request ) {
 			if ( ! is_ssl() ) {
 
 				$require_ssl = REST_API_Toolbox_Settings::setting_is_enabled( 'ssl', 'require-ssl' );
@@ -167,7 +167,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		static public function remove_wordpress_core_namespace( $response ) {
+		static public function remove_wordpress_core_namespace_filter( $response ) {
 
 			$remove_all = REST_API_Toolbox_Settings::setting_is_enabled( 'core', 'remove-all-core-routes' );
 			if ( $remove_all ) {
@@ -185,7 +185,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		static public function remove_all_core_endpoints( $routes ) {
+		static public function remove_all_core_endpoints_filter( $routes ) {
 
 			$remove_all = REST_API_Toolbox_Settings::setting_is_enabled( 'core', 'remove-all-core-routes' );
 
@@ -197,15 +197,23 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		}
 
 
-		static public function remove_selected_core_endpoints( $routes ) {
+		static public function remove_selected_endpoints_filter( $routes ) {
 
+			// Get the list of core endpoints.
 			$core_settings = get_option( REST_API_Toolbox_Settings::options_key( 'core' ) );
 			$core_settings = ! is_array( $core_settings ) ? array() : $core_settings;
+
+			// Get the list of custom post types.
+			$cpt_settings  = get_option( REST_API_Toolbox_Settings::options_key( 'cpt' ) );
+			$cpt_settings  = ! is_array( $cpt_settings ) ? array() : $cpt_settings;
+
+			// Combine the list.
+			$settings = array_merge( $core_settings, $cpt_settings );
 
 			$pattern = "/remove-endpoint\\|(.+)/";
 			$endpoints = array();
 
-			foreach ( $core_settings as $setting => $enabled ) {
+			foreach ( $settings as $setting => $enabled ) {
 				if ( '1' === $enabled ) {
 					$matches = array();
 					if ( 1 === preg_match( $pattern, $setting, $matches ) ) {
@@ -249,13 +257,22 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			// Get the route for the request.
 			$route = $request->get_route();
 
-			// Get the settings for core.
+			// Get the list of core endpoints.
 			$core_settings = get_option( REST_API_Toolbox_Settings::options_key( 'core' ) );
+			$core_settings = ! is_array( $core_settings ) ? array() : $core_settings;
+
+			// Get the list of custom post types.
+			$cpt_settings  = get_option( REST_API_Toolbox_Settings::options_key( 'cpt' ) );
+			$cpt_settings  = ! is_array( $cpt_settings ) ? array() : $cpt_settings;
+
+			// Combine the list.
+			$settings = array_merge( $core_settings, $cpt_settings );
+
 			$key = 'require-authentication|' . $route;
 
 			// See if this route is configured to require authentication and
 			// if there is a current user logged in.
-			if ( ! empty( $core_settings ) && isset( $core_settings[ $key ] ) && '1' === $core_settings[ $key ] && ! is_user_logged_in() ) {
+			if ( ! empty( $settings ) && isset( $settings[ $key ] ) && '1' === $settings[ $key ] && ! is_user_logged_in() ) {
 
 				// Return a WP_Error is authentication is required but there
 				// is no current user logged in.
@@ -267,6 +284,27 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			}
 
 			return $result;
+		}
+
+
+		/**
+		 * Returns a list of custom post types that are exposed via the
+		 * REST API.
+		 *
+		 * @return array
+		 */
+		static public function get_custom_post_types() {
+
+			// Build the filters for the list of post types.
+			$args = array(
+				'show_in_rest' => true,
+				'_builtin' => false,
+				);
+
+			// Allow the return value to be filterable.
+			$post_types = apply_filters( 'rest-api-toolbox-custom-post-types', get_post_types( $args, 'objects' ) );
+
+			return $post_types;
 		}
 
 	}

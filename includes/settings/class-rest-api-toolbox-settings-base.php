@@ -245,7 +245,22 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			<?php
 		}
 
+		/**
+		 * Outputs the Remove Endpoints header.
+		 *
+		 * @return void
+		 */
+		static public function section_header_remove() {
+			self::header( __( 'Remove Endpoints', 'rest-api-toolbox' ) );
+		}
 
+		/**
+		 * Outputs the Require Authentication header.
+		 *
+		 * @return void
+		 */
+		static public function section_header_require_authentication() {
+			self::header( __( 'Require Authentication', 'rest-api-toolbox' ) );
+		}
 	}
-
 }

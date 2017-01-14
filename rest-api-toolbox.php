@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: REST API Toolbox
- * Version: 1.3.0
+ * Version: 1.4.0
  * Description: Allows easy tweaks of several REST API settings
  * Author: Pete Nelson
  * Author URI: https://github.com/petenelson/wp-rest-api-toolbox
@@ -18,6 +18,14 @@ class REST_API_Toolbox_Plugin {
 		if ( ! defined( 'REST_API_TOOLBOX_ROOT' ) ) {
 			define( 'REST_API_TOOLBOX_ROOT', trailingslashit( dirname( __FILE__ ) ) );
 		}
+
+		if ( ! defined( 'REST_API_TOOLBOX_FILE' ) ) {
+			define( 'REST_API_TOOLBOX_FILE', __FILE__ );
+		}
+
+		if ( ! defined( 'REST_API_TOOLBOX_BASENAME' ) ) {
+			define( 'REST_API_TOOLBOX_BASENAME', plugin_basename( REST_API_TOOLBOX_FILE ) );
+		}
 	}
 
 	static function get_required_files() {
@@ -26,10 +34,12 @@ class REST_API_Toolbox_Plugin {
 			'class-rest-api-toolbox-common',
 			'class-rest-api-toolbox-prefix',
 			'class-rest-api-toolbox-i18n',
+			'class-rest-api-toolbox-admin',
 			'settings/class-rest-api-toolbox-settings-base',
 			'settings/class-rest-api-toolbox-settings',
 			'settings/class-rest-api-toolbox-settings-general',
 			'settings/class-rest-api-toolbox-settings-core',
+			'settings/class-rest-api-toolbox-settings-custom-post-types',
 			'settings/class-rest-api-toolbox-settings-ssl',
 			'settings/class-rest-api-toolbox-settings-help',
 			);
@@ -47,10 +57,12 @@ class REST_API_Toolbox_Plugin {
 			'REST_API_Toolbox_Common',
 			'REST_API_Toolbox_Prefix',
 			'REST_API_Toolbox_i18n',
+			'REST_API_Toolbox_Admin',
 			'REST_API_Toolbox_Settings_Base',
 			'REST_API_Toolbox_Settings',
 			'REST_API_Toolbox_Settings_General',
 			'REST_API_Toolbox_Settings_Core',
+			'REST_API_Toolbox_Settings_Custom_Post_Types',
 			'REST_API_Toolbox_Settings_SSL',
 			'REST_API_Toolbox_Settings_Help',
 			);

@@ -41,6 +41,10 @@ Have any questions?  We can answer them here?
 
 == Changelog ==
 
+= 1.4.1 January 16th, 2017 =
+* Added settings support for No Custom Post Types
+* Fixed undefined variable notice (props @funkolector)
+
 = 1.4.0 January 13th, 2017 =
 * Added support for removing or requiring authentication for custom post types.
 * Updated Settings UI for better clarity.
@@ -63,6 +67,10 @@ Have any questions?  We can answer them here?
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.4.1 January 16th, 2017 =
+* Added settings support for No Custom Post Types
+* Fixed undefined variable notice (props @funkolector)
 
 = 1.4.0 January 13th, 2017 =
 * Added support for removing or requiring authentication for custom post types.

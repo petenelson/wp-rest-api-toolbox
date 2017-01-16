@@ -31,17 +31,27 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Custom_Post_Types' ) ) {
 			$section_remove = 'cpt-remove';
 			$section_auth = 'cpt-authentication';
 
-			add_settings_section( $section_remove, '', array( __CLASS__, 'section_header_remove' ), $key );
-			add_settings_section( $section_auth, '', array( __CLASS__, 'section_header_require_authentication' ), $key );
-
 			$namespace = REST_API_Toolbox_Common::core_namespace();
 
 			// Get the list of custom post types.
 			$post_types = REST_API_Toolbox_Common::get_custom_post_types();
 
 			// Build the list of endpoints based on each post type's rest_base.
+			$endpoints = array();
 			foreach( $post_types as $post_type_object ) {
 				$endpoints[] = ! empty( $post_type_object->rest_base ) ? $post_type_object->rest_base : $post_type_object->name;
+			}
+
+			// Are there custom post types available?
+			if ( empty( $endpoints ) ) {
+
+				// Create an empty section for No Custom Post Types
+				add_settings_section( $section_remove, '', array( __CLASS__, 'section_header_no_cpts' ), $key );
+			} else {
+
+				// Create sections for remove and require authentication.
+				add_settings_section( $section_remove, '', array( __CLASS__, 'section_header_remove' ), $key );
+				add_settings_section( $section_auth, '', array( __CLASS__, 'section_header_require_authentication' ), $key );
 			}
 
 			foreach( $endpoints as $endpoint ) {
@@ -74,6 +84,15 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Custom_Post_Types' ) ) {
 		 */
 		static public function sanitize_cpt_settings( $settings ) {
 			return $settings;
+		}
+
+		/**
+		 * Outputs the No Custom Post Types header.
+		 *
+		 * @return void
+		 */
+		static public function section_header_no_cpts() {
+			self::header( __( 'No Custom Post Types', 'rest-api-toolbox' ) );
 		}
 	}
 }

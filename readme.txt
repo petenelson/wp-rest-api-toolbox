@@ -4,7 +4,7 @@ Tags: rest api, rest, wp rest api, json api
 Donate link: https://petenelson.io/
 Requires at least: 4.4
 Tested up to: 4.7
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Have any questions?  We can answer them here?
 2. WordPress core settings
 
 == Changelog ==
+
+= 1.4.2 February 13th, 2017 =
+* Fixed bug in requiring authentication for endpoints that accessed specific items (ex: /wp/v2/users/1)
 
 = 1.4.1 January 16th, 2017 =
 * Added settings support for No Custom Post Types

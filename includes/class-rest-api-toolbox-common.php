@@ -268,19 +268,45 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 			// Combine the list.
 			$settings = array_merge( $core_settings, $cpt_settings );
 
-			$key = 'require-authentication|' . $route;
-
 			// See if this route is configured to require authentication and
 			// if there is a current user logged in.
-			if ( ! empty( $settings ) && isset( $settings[ $key ] ) && '1' === $settings[ $key ] && ! is_user_logged_in() ) {
+			if ( ! empty( $settings ) && is_array( $settings ) && ! is_user_logged_in() ) {
 
-				// Return a WP_Error is authentication is required but there
-				// is no current user logged in.
-				$result = new WP_Error(
-					'rest_cannot_view',
-					sprintf( __( 'The REST API route %s requires authentication on this site.', 'rest-api-toolbox' ), $route ),
-					array( 'status' => 401 )
-				);
+				$require_auth = false;
+				$require_auth_start = 'require-authentication|';
+
+				// Loop through each setting and see if the route matches.
+				foreach ( $settings as $key => $enabled ) {
+					if ( '1' === $enabled && 0 === stripos( $key, $require_auth_start ) ) {
+
+						// Strip off the start to find the route.
+						$key = str_replace( $require_auth_start, '', $key );
+
+						// See if we have an exact match (ex: /wp/v2/users)
+						if ( $route === $key ) {
+							$require_auth = true;
+						} else {
+
+							// Check it against a regex for things like
+							// /wp/v2/users/1
+							$regex = '^' . str_replace( '/', '\/', $key ) . '\/.+$';
+
+							if ( 1 === preg_match( '/' . $regex . '/', $route ) ) {
+								$require_auth = true;
+							}
+						}
+					}
+
+					// Return a WP_Error is authentication is required but there
+					// is no current user logged in.
+					if ( $require_auth ) {
+						return new WP_Error(
+							'rest_cannot_view',
+							sprintf( __( 'The REST API route %s requires authentication on this site.', 'rest-api-toolbox' ), $route ),
+							array( 'status' => 401 )
+						);
+					}
+				}
 			}
 
 			return $result;

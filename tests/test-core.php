@@ -119,6 +119,13 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 			// Verify that the request returns a WP_Error for rest_pre_dispatch
 			$this->assertInstanceOf( 'WP_Error', apply_filters( 'rest_pre_dispatch', array(), rest_get_server(), $request ) );
+
+			// Create a REST request for a specific item.
+			$request = new WP_REST_Request( 'GET', $endpoint . '/12345' );
+
+			// Verify that the request returns a WP_Error for rest_pre_dispatch
+			$this->assertInstanceOf( 'WP_Error', apply_filters( 'rest_pre_dispatch', array(), rest_get_server(), $request ) );
+
 		}
 	}
 
@@ -138,6 +145,12 @@ class REST_API_Toolbox_Test_Core extends REST_API_Toolbox_Test_Base {
 
 			// Create a REST request
 			$request = new WP_REST_Request( 'GET', $endpoint );
+
+			// Verify that the request returns the same result.
+			$this->assertEquals( array(), apply_filters( 'rest_pre_dispatch', array(), rest_get_server(), $request ) );
+
+			// Create a REST request for a specific item.
+			$request = new WP_REST_Request( 'GET', $endpoint . '/12345' );
 
 			// Verify that the request returns the same result.
 			$this->assertEquals( array(), apply_filters( 'rest_pre_dispatch', array(), rest_get_server(), $request ) );

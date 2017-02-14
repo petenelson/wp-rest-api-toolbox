@@ -106,11 +106,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 		/**
 		 * Filter hook for disabling the REST API in WordPress 4.7 and higher.
 		 *
-		 * @param  mixed $error Default value.
-		 * @return mixed        WP_Error if disabled, otherwise the default value.
+		 * @param  mixed $error WP_Error if authentication error, null if authentication
+		 *                      method wasn't used, true if authentication succeeded.
+		 * @return mixed
 		 */
 		static public function rest_authentication_errors_filter( $error ) {
-			if ( $error ) {
+			if ( ! is_wp_error( $error ) ) {
 				$disable_rest_api = REST_API_Toolbox_Settings::setting_is_enabled( 'general', 'disable-rest-api' );
 
 				if ( $disable_rest_api ) {

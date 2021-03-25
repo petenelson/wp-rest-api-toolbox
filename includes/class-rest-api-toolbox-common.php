@@ -155,6 +155,12 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 
 
 		static public function disallow_non_ssl_filter( $response, $server, $request ) {
+
+			// Don't check for SSL during WP-CLI commands.
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				return $response;
+			}
+
 			if ( ! is_ssl() ) {
 
 				$require_ssl = REST_API_Toolbox_Settings::setting_is_enabled( 'ssl', 'require-ssl' );

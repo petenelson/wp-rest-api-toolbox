@@ -4,7 +4,7 @@
 **Donate link:** https://petenelson.io/  
 **Requires at least:** 4.4  
 **Tested up to:** 5.7  
-**Stable tag:** 1.4.2  
+**Stable tag:** 1.4.3  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -49,6 +49,9 @@ Have any questions?  We can answer them here?
 
 ## Changelog ##
 
+### 1.4.3 March 25th, 2021 ###
+* No longer check for SSL when running any WP-CLI commands.
+
 ### 1.4.2 February 13th, 2017 ###
 * Fixed bug in requiring authentication for endpoints that accessed specific items (ex: /wp/v2/users/1)
 
@@ -79,14 +82,5 @@ Have any questions?  We can answer them here?
 
 ## Upgrade Notice ##
 
-### 1.4.2 February 13th, 2017 ###
-* Fixed bug in requiring authentication for endpoints that accessed specific items (ex: /wp/v2/users/1)
-
-### 1.4.1 January 16th, 2017 ###
-* Added settings support for No Custom Post Types
-* Fixed undefined variable notice (props @funkolector)
-
-### 1.4.0 January 13th, 2017 ###
-* Added support for removing or requiring authentication for custom post types.
-* Updated Settings UI for better clarity.
-* Added link to settings page from the plugins list page.
+### 1.4.3 March 25th, 2021 ###
+* No longer check for SSL when running any WP-CLI commands.

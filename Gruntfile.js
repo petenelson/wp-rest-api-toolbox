@@ -29,30 +29,8 @@ module.exports = function( grunt ) {
 			},
 		},
 
-		insert: {
-			options: {},
-			badges: {
-				src: "badges.md",
-				dest: "README.md",
-				match: "**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  "
-			},
-		},
-
 		clean:  {
 			wp: [ "release" ]
-		},
-
-		phplint: {
-			options: {
-				limit: 10,
-				stdout: true,
-				stderr: true
-			},
-			files: [
-				'admin/**/*.php',
-				'includes/*.php',
-				'*.php'
-			]
 		},
 
 		phpunit: {
@@ -105,14 +83,11 @@ module.exports = function( grunt ) {
 
 	} );
 
-	require('phplint').gruntPlugin(grunt);
-
 	var tasks = [
 		'grunt-contrib-clean',
 		'grunt-contrib-copy',
 		'grunt-wp-i18n',
-		'grunt-wp-readme-to-markdown',
-		'grunt-insert'
+		'grunt-wp-readme-to-markdown'
 		];
 
 	for	( var i = 0; i < tasks.length; i++ ) {
@@ -121,7 +96,7 @@ module.exports = function( grunt ) {
 
 
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
-	grunt.registerTask( 'readme', ['wp_readme_to_markdown', 'insert:badges'] );
+	grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
 
 	grunt.registerTask( 'test', [ 'phplint', 'phpunit' ] );
 
@@ -137,5 +112,4 @@ module.exports = function( grunt ) {
 	});
 
 	grunt.util.linefeed = '\n';
-
 };

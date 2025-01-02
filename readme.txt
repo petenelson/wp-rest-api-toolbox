@@ -4,7 +4,7 @@ Tags: rest api, rest, wp rest api, json api
 Donate link: https://petenelson.io/
 Requires at least: 4.4
 Tested up to: 5.7
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Have any questions?  We can answer them here?
 2. WordPress core settings
 
 == Changelog ==
+
+= 1.4.4 January 2nd, 2025 =
+* Fixed deprecated notices for PHP 8 (props @thefrosty).
 
 = 1.4.3 March 25th, 2021 =
 * No longer check for SSL when running any WP-CLI commands.

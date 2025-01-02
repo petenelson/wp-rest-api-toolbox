@@ -66,7 +66,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 			</div>
 			<?php
 
-			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_STRING );
+			$settings_updated = filter_input( INPUT_GET, 'settings-updated', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			if ( ! empty( $settings_updated ) ) {
 				do_action( 'rest-api-toolbox-settings-updated' );
 				flush_rewrite_rules();
@@ -76,7 +76,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings' ) ) {
 
 
 		static public function current_tab() {
-			$current_tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_STRING );
+			$current_tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			return empty( $current_tab ) ? 'rest-api-toolbox-settings-general' : $current_tab;
 		}
 

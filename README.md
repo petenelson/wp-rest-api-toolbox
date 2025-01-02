@@ -1,16 +1,12 @@
 # REST API Toolbox #
-**Contributors:** gungeekatx  
+**Contributors:** [gungeekatx](https://profiles.wordpress.org/gungeekatx/)  
 **Tags:** rest api, rest, wp rest api, json api  
 **Donate link:** https://petenelson.io/  
 **Requires at least:** 4.4  
 **Tested up to:** 5.7  
-**Stable tag:** 1.4.3  
+**Stable tag:** 1.4.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
-
-[![Code Climate](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox/badges/gpa.svg)](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox)
-[![Test Coverage](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox/badges/coverage.svg)](https://codeclimate.com/github/petenelson/wp-rest-api-toolbox/coverage)
-[![Travis CI](https://travis-ci.org/petenelson/wp-rest-api-toolbox.svg)](https://travis-ci.org/petenelson/wp-rest-api-toolbox/)
 
 Allows tweaking of several REST API settings
 
@@ -48,6 +44,9 @@ Have any questions?  We can answer them here?
 
 
 ## Changelog ##
+
+### 1.4.4 January 2nd, 2025 ###
+* Fixed deprecated notices for PHP 8 (props @thefrosty).
 
 ### 1.4.3 March 25th, 2021 ###
 * No longer check for SSL when running any WP-CLI commands.

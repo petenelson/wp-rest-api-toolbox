@@ -309,7 +309,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Common' ) ) {
 					if ( $require_auth ) {
 						return new WP_Error(
 							'rest_cannot_view',
-							sprintf( __( 'The REST API route %s requires authentication on this site.', 'rest-api-toolbox' ), $route ),
+							sprintf( __( 'The REST API route %s requires authentication on this site.', 'rest-api-toolbox' ), esc_html( $route ) ),
 							array( 'status' => 401 )
 						);
 					}

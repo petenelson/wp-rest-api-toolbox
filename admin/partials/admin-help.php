@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) die( 'restricted access' );
 
 <div class="rest-api-toolbox-help">
 
-	<h3 class="title"><?php _e( 'Contact', 'rest-api-toolbox' ); ?></h3>
+	<h3 class="title"><?php esc_html_e( 'Contact', 'rest-api-toolbox' ); ?></h3>
 	<p>
 		<?php esc_html_e( 'E-Mail', 'rest-api-toolbox' ) ?>: <a href="mailto:pete@petenelson.com">pete@petenelson.com</a><br/>
 		<?php esc_html_e( 'Twitter', 'rest-api-toolbox' ) ?>: <a href="https://twitter.com/CodeGeekATX" target="_blank">@CodeGeekATX</a><br/>

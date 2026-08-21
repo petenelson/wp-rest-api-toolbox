@@ -111,28 +111,28 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Base' ) ) {
 			$option = get_option( $key );
 			$value = isset( $option[ $name ] ) ? $option[ $name ] : '';
 
-			$min_max_step = '';
-			if ( $type === 'number' ) {
+			$is_number = 'number' === $type;
+
+			if ( $is_number ) {
 				$min = absint( $args['min'] );
 				$max = absint( $args['max'] );
 				$step = absint( $args['step'] );
-				$min_max_step = sprintf( ' step="%1$s" min="%2$s" max="%3$s" ',
-					esc_attr( $step ),
-					esc_attr( $min ),
-					esc_attr( $max )
-					);
 			}
 
 			?>
 				<div>
 					<input
-						id="<?php echo esc_attr( $name ); ?> "
+						id="<?php echo esc_attr( $name ); ?>"
 						name="<?php echo esc_attr( "{$key}[{$name}]" ) ?>"
 						type="<?php echo esc_attr( $type ); ?>"
 						value="<?php echo esc_attr( $value ); ?>"
 						size="<?php echo esc_attr( $size ); ?>"
 						maxlength="<?php echo esc_attr( $maxlength ); ?>"
-						{$min_max_step}
+						<?php if ( $is_number ) : ?>
+						step="<?php echo esc_attr( $step ); ?>"
+						min="<?php echo esc_attr( $min ); ?>"
+						max="<?php echo esc_attr( $max ); ?>"
+						<?php endif; ?>
 						/>
 				</div>
 			<?php

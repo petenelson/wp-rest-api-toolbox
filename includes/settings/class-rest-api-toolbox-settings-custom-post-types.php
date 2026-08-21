@@ -58,7 +58,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Custom_Post_Types' ) ) {
 
 				// Add yes/no options to remove the endpoint.
 				$name = 'remove-endpoint|/' . $namespace . '/' . $endpoint;
-				add_settings_field( $name, sprintf( __( '%s', 'rest-api-toolbox' ), $endpoint),
+				add_settings_field( $name, esc_html( $endpoint ),
 					array( __CLASS__, 'settings_checkbox' ),
 					$key,
 					$section_remove,
@@ -67,7 +67,7 @@ if ( ! class_exists( 'REST_API_Toolbox_Settings_Custom_Post_Types' ) ) {
 
 				// Add yes/no options to require authentication.
 				$name = 'require-authentication|/' . $namespace . '/' . $endpoint;
-				add_settings_field( $name, sprintf( __( '%s', 'rest-api-toolbox' ), $endpoint),
+				add_settings_field( $name, esc_html( $endpoint ),
 					array( __CLASS__, 'settings_checkbox' ),
 					$key,
 					$section_auth,
